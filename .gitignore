@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# SQL Server local files
+*.mdf
+*.ldf
+*.bak
+
+# Editor / IDE
+.vs/
+.vscode/
+.idea/
+*.user
+
+# Build output (Parts 2 and 3)
+bin/
+obj/
+[Ll]og/
+*.log
+
+# Environment secrets (Parts 2 and 3)
+appsettings.Development.json
+.env
