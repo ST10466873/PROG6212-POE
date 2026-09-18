@@ -32,3 +32,13 @@ All routes are relative to the API base URL (for example `https://localhost:5001
 | GET | `/api/users/me` | Returns the profile of the currently logged-in user. | Any | None | `200 OK` — user profile. `401 Unauthorized` — not logged in. |
 | PUT | `/api/users/me` | Updates the profile details of the currently logged-in user. | Any | `{ firstName, lastName, email, phoneNumber, dateOfBirth }` | `200 OK` — updated profile. `400 Bad Request` — invalid values. `401 Unauthorized` — not logged in. `409 Conflict` — email used by another account. |
 
+## 3. Events (Organisers manage; both roles view)
+
+| HTTP Method | Route | Description | Role Required | Request Body | Expected Response |
+|---|---|---|---|---|---|
+| GET | `/api/events` | Returns all upcoming events, optionally filtered by type or location. | None | None | `200 OK` — list of events. |
+| GET | `/api/events/{id}` | Returns the full details of a single event including its route information. | None | None | `200 OK` — event detail. `404 Not Found` — event does not exist. |
+| POST | `/api/events` | Creates a new event owned by the logged-in Organiser. | Organiser | `{ name, description, date, location, distanceKm, eventType }` | `201 Created` — new event. `400 Bad Request` — invalid fields (distance ≤ 0, bad event type). `401 Unauthorized` — not logged in. `403 Forbidden` — Participant attempted to create an event. |
+| PUT | `/api/events/{id}` | Updates an existing event. Only the Organiser who owns the event may update it. | Organiser | `{ name, description, date, location, distanceKm, eventType }` | `200 OK` — updated event. `404 Not Found` — event does not exist. `403 Forbidden` — Organiser does not own the event. |
+| DELETE | `/api/events/{id}` | Deletes an event and its dependent enrolments/results. Owner only. | Organiser | None | `204 No Content` — event deleted. `404 Not Found` — event does not exist. `403 Forbidden` — Organiser does not own the event. |
+
