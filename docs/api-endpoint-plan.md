@@ -71,3 +71,16 @@ All routes are relative to the API base URL (for example `https://localhost:5001
 
 ---
 
+## Coverage check against Part 2 Functional Requirements
+
+| Required area | Endpoints planned |
+|---|---|
+| Authentication (register and login) | 3 |
+| User Profile (view and update own) | 2 |
+| Events (CRUD + view for both roles) | 5 |
+| Categories (define and view) | 4 |
+| Event Enrolments (enter, view own, Organiser views all) | 4 |
+| Results (capture, correct, view own, view event table) | 4 |
+| **Total** | **22** |
+
+Failure codes are included for every endpoint that can fail. This plan is the specification for Part 2; any deviation implemented later must be explained in the README.
