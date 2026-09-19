@@ -51,3 +51,12 @@ All routes are relative to the API base URL (for example `https://localhost:5001
 | PUT | `/api/categories/{id}` | Updates a category name or age range. | Organiser | `{ categoryName, minAge, maxAge }` | `200 OK` — updated category. `403 Forbidden` — not the owning Organiser. `404 Not Found` — category does not exist. |
 | DELETE | `/api/categories/{id}` | Removes a category that has no enrolments yet. | Organiser | None | `204 No Content` — category removed. `409 Conflict` — category still has enrolments. `403 Forbidden` — not the owning Organiser. `404 Not Found` — category does not exist. |
 
+## 5. Event Enrolments (Participants enter events; Organisers view enrolments)
+
+| HTTP Method | Route | Description | Role Required | Request Body | Expected Response |
+|---|---|---|---|---|---|
+| POST | `/api/events/{id}/enrolments` | Enters the logged-in Participant into an event using a selected category. Records the link between Participant, event and category. | Participant | `{ categoryId }` | `201 Created` — enrolment record with enrolment date. `400 Bad Request` — invalid category for the event. `401 Unauthorized` — not logged in. `403 Forbidden` — Organiser attempted to enrol. `404 Not Found` — event or category does not exist. `409 Conflict` — already enrolled in this event. |
+| GET | `/api/events/{id}/enrolments` | Returns every enrolment for an event, used by the Organiser to manage race day. | Organiser | None | `200 OK` — list of enrolments with participant and category details. `403 Forbidden` — not the owning Organiser. `404 Not Found` — event does not exist. |
+| GET | `/api/enrolments/me` | Returns all of the current Participant's own enrolments. | Participant | None | `200 OK` — list of the participant's enrolments. `401 Unauthorized` — not logged in. |
+| DELETE | `/api/enrolments/{id}` | Cancels the logged-in Participant's own enrolment before the event. | Participant | None | `204 No Content` — enrolment cancelled. `403 Forbidden` — cancelling someone else's enrolment. `404 Not Found` — enrolment does not exist. |
+
