@@ -42,3 +42,12 @@ All routes are relative to the API base URL (for example `https://localhost:5001
 | PUT | `/api/events/{id}` | Updates an existing event. Only the Organiser who owns the event may update it. | Organiser | `{ name, description, date, location, distanceKm, eventType }` | `200 OK` — updated event. `404 Not Found` — event does not exist. `403 Forbidden` — Organiser does not own the event. |
 | DELETE | `/api/events/{id}` | Deletes an event and its dependent enrolments/results. Owner only. | Organiser | None | `204 No Content` — event deleted. `404 Not Found` — event does not exist. `403 Forbidden` — Organiser does not own the event. |
 
+## 4. Categories (Organisers define age/distance categories per event; both roles view)
+
+| HTTP Method | Route | Description | Role Required | Request Body | Expected Response |
+|---|---|---|---|---|---|
+| GET | `/api/events/{id}/categories` | Lists all categories available for a specific event. | None | None | `200 OK` — category list. `404 Not Found` — event does not exist. |
+| POST | `/api/events/{id}/categories` | Adds a category (e.g. Under 20, Senior, 10km, 21km) to an event. Owner Organiser only. | Organiser | `{ categoryName, minAge, maxAge }` | `201 Created` — new category. `400 Bad Request` — invalid age range or duplicate name. `403 Forbidden` — not the owning Organiser. `404 Not Found` — event does not exist. |
+| PUT | `/api/categories/{id}` | Updates a category name or age range. | Organiser | `{ categoryName, minAge, maxAge }` | `200 OK` — updated category. `403 Forbidden` — not the owning Organiser. `404 Not Found` — category does not exist. |
+| DELETE | `/api/categories/{id}` | Removes a category that has no enrolments yet. | Organiser | None | `204 No Content` — category removed. `409 Conflict` — category still has enrolments. `403 Forbidden` — not the owning Organiser. `404 Not Found` — category does not exist. |
+
