@@ -60,3 +60,14 @@ All routes are relative to the API base URL (for example `https://localhost:5001
 | GET | `/api/enrolments/me` | Returns all of the current Participant's own enrolments. | Participant | None | `200 OK` — list of the participant's enrolments. `401 Unauthorized` — not logged in. |
 | DELETE | `/api/enrolments/{id}` | Cancels the logged-in Participant's own enrolment before the event. | Participant | None | `204 No Content` — enrolment cancelled. `403 Forbidden` — cancelling someone else's enrolment. `404 Not Found` — enrolment does not exist. |
 
+## 6. Results (Organisers capture times/positions; Participants view their own)
+
+| HTTP Method | Route | Description | Role Required | Request Body | Expected Response |
+|---|---|---|---|---|---|
+| POST | `/api/enrolments/{id}/result` | Captures a finish time and finishing position for a Participant after the event. | Organiser | `{ finishTime, position }` | `201 Created` — result record. `400 Bad Request` — invalid time or position. `403 Forbidden` — not the owning Organiser. `404 Not Found` — enrolment does not exist. `409 Conflict` — result already captured or position already taken in the event. |
+| PUT | `/api/results/{id}` | Corrects an existing result (e.g. timing dispute). | Organiser | `{ finishTime, position }` | `200 OK` — updated result. `403 Forbidden` — not the owning Organiser. `404 Not Found` — result does not exist. `409 Conflict` — position conflicts with another result. |
+| GET | `/api/enrolments/{id}/result` | Returns the result for a single enrolment: the Participant's own result, or any result for the owning Organiser. | Any | None | `200 OK` — result detail. `403 Forbidden` — another user's result. `404 Not Found` — result does not exist. |
+| GET | `/api/events/{id}/results` | Returns the results table (positions and times) for an event, ordered by finishing position. | None | None | `200 OK` — ordered result list. `404 Not Found` — event does not exist. |
+
+---
+
