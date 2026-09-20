@@ -112,3 +112,42 @@ CREATE TABLE dbo.Routes
 GO
 
 -- ---------------------------------------------------------------------------------------------
+-- 6. EventCategories - age or distance categories defined by Organisers per event
+-- ---------------------------------------------------------------------------------------------
+CREATE TABLE dbo.EventCategories
+(
+    CategoryId    INT           IDENTITY(1,1) NOT NULL,
+    EventId       INT           NOT NULL,
+    CategoryName  NVARCHAR(50)  NOT NULL,
+    MinAge        INT           NULL,
+    MaxAge        INT           NULL,
+    CONSTRAINT PK_EventCategories PRIMARY KEY CLUSTERED (CategoryId),
+    CONSTRAINT UQ_EventCategories_Event_Name UNIQUE (EventId, CategoryName),
+    CONSTRAINT CK_EventCategories_MinAge CHECK (MinAge IS NULL OR MinAge >= 0),
+    CONSTRAINT CK_EventCategories_MaxAge CHECK (MaxAge IS NULL OR MaxAge >= 0),
+    CONSTRAINT CK_EventCategories_AgeRange CHECK (MinAge IS NULL OR MaxAge IS NULL OR MinAge <= MaxAge),
+    CONSTRAINT FK_EventCategories_Events FOREIGN KEY (EventId) REFERENCES dbo.Events (EventId)
+);
+GO
+
+-- ---------------------------------------------------------------------------------------------
+-- 7. Enrolments - links a Participant to an Event and the Category they selected
+-- ---------------------------------------------------------------------------------------------
+CREATE TABLE dbo.Enrolments
+(
+    EnrolmentId    INT           IDENTITY(1,1) NOT NULL,
+    EventId        INT           NOT NULL,
+    UserId         INT           NOT NULL,
+    CategoryId     INT           NOT NULL,
+    EnrolmentDate  DATETIME2(0)  NOT NULL CONSTRAINT DF_Enrolments_EnrolmentDate DEFAULT (SYSUTCDATETIME()),
+    Status         NVARCHAR(20)  NOT NULL CONSTRAINT DF_Enrolments_Status DEFAULT (N'Confirmed'),
+    CONSTRAINT PK_Enrolments PRIMARY KEY CLUSTERED (EnrolmentId),
+    CONSTRAINT UQ_Enrolments_Event_User UNIQUE (EventId, UserId),
+    CONSTRAINT CK_Enrolments_Status CHECK (Status IN (N'Confirmed', N'Cancelled')),
+    CONSTRAINT FK_Enrolments_Events FOREIGN KEY (EventId) REFERENCES dbo.Events (EventId),
+    CONSTRAINT FK_Enrolments_Users FOREIGN KEY (UserId) REFERENCES dbo.Users (UserId),
+    CONSTRAINT FK_Enrolments_Categories FOREIGN KEY (CategoryId) REFERENCES dbo.EventCategories (CategoryId)
+);
+GO
+
+-- ---------------------------------------------------------------------------------------------
