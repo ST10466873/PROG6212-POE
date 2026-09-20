@@ -72,3 +72,43 @@ CREATE TABLE dbo.Users
 GO
 
 -- ---------------------------------------------------------------------------------------------
+-- 4. Events - created, edited and deleted by Organisers; viewed by both roles
+-- ---------------------------------------------------------------------------------------------
+CREATE TABLE dbo.Events
+(
+    EventId       INT             IDENTITY(1,1) NOT NULL,
+    OrganiserId   INT             NOT NULL,
+    EventName     NVARCHAR(100)   NOT NULL,
+    Description   NVARCHAR(500)   NOT NULL,
+    EventDate     DATE            NOT NULL,
+    Location      NVARCHAR(100)   NOT NULL,
+    DistanceKm    DECIMAL(6,2)    NOT NULL,
+    EventType     NVARCHAR(10)    NOT NULL,
+    CONSTRAINT PK_Events PRIMARY KEY CLUSTERED (EventId),
+    CONSTRAINT UQ_Events_Name_Date_Location UNIQUE (EventName, EventDate, Location),
+    CONSTRAINT CK_Events_DistanceKm CHECK (DistanceKm > 0),
+    CONSTRAINT CK_Events_EventType CHECK (EventType IN (N'Run', N'Walk', N'Cycle')),
+    CONSTRAINT CK_Events_EventDate CHECK (EventDate >= CAST(N'2020-01-01' AS DATE)),
+    CONSTRAINT FK_Events_Users FOREIGN KEY (OrganiserId) REFERENCES dbo.Users (UserId)
+);
+GO
+
+-- ---------------------------------------------------------------------------------------------
+-- 5. Routes - live route information used by Participants on race day (one route per event)
+-- ---------------------------------------------------------------------------------------------
+CREATE TABLE dbo.Routes
+(
+    RouteId         INT             IDENTITY(1,1) NOT NULL,
+    EventId         INT             NOT NULL,
+    StartPoint      NVARCHAR(100)   NOT NULL,
+    EndPoint        NVARCHAR(100)   NOT NULL,
+    ElevationGainM  INT             NOT NULL CONSTRAINT DF_Routes_ElevationGainM DEFAULT (0),
+    GpxTrackUrl     NVARCHAR(255)   NULL,
+    CONSTRAINT PK_Routes PRIMARY KEY CLUSTERED (RouteId),
+    CONSTRAINT UQ_Routes_EventId UNIQUE (EventId),
+    CONSTRAINT CK_Routes_ElevationGainM CHECK (ElevationGainM >= 0),
+    CONSTRAINT FK_Routes_Events FOREIGN KEY (EventId) REFERENCES dbo.Events (EventId)
+);
+GO
+
+-- ---------------------------------------------------------------------------------------------
