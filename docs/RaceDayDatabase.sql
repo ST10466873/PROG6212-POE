@@ -151,3 +151,51 @@ CREATE TABLE dbo.Enrolments
 GO
 
 -- ---------------------------------------------------------------------------------------------
+-- 8. Results - finish time and finishing position captured by Organisers after an event
+-- ---------------------------------------------------------------------------------------------
+CREATE TABLE dbo.Results
+(
+    ResultId          INT           IDENTITY(1,1) NOT NULL,
+    EnrolmentId       INT           NOT NULL,
+    EventId           INT           NOT NULL,
+    FinishTime        TIME(3)       NOT NULL,
+    FinishingPosition INT           NOT NULL,
+    CapturedAt        DATETIME2(0)  NOT NULL CONSTRAINT DF_Results_CapturedAt DEFAULT (SYSUTCDATETIME()),
+    CONSTRAINT PK_Results PRIMARY KEY CLUSTERED (ResultId),
+    CONSTRAINT UQ_Results_EnrolmentId UNIQUE (EnrolmentId),
+    CONSTRAINT UQ_Results_Event_Position UNIQUE (EventId, FinishingPosition),
+    CONSTRAINT CK_Results_FinishingPosition CHECK (FinishingPosition > 0),
+    CONSTRAINT FK_Results_Enrolments FOREIGN KEY (EnrolmentId) REFERENCES dbo.Enrolments (EnrolmentId),
+    CONSTRAINT FK_Results_Events FOREIGN KEY (EventId) REFERENCES dbo.Events (EventId)
+);
+GO
+
+-- ---------------------------------------------------------------------------------------------
+-- 9. Sessions - server-side session state used for role-based authentication (Part 2)
+-- ---------------------------------------------------------------------------------------------
+CREATE TABLE dbo.Sessions
+(
+    SessionId    INT            IDENTITY(1,1) NOT NULL,
+    UserId       INT            NOT NULL,
+    SessionToken NVARCHAR(64)   NOT NULL,
+    CreatedAt    DATETIME2(0)   NOT NULL CONSTRAINT DF_Sessions_CreatedAt DEFAULT (SYSUTCDATETIME()),
+    ExpiresAt    DATETIME2(0)   NOT NULL,
+    IsActive     BIT            NOT NULL CONSTRAINT DF_Sessions_IsActive DEFAULT (1),
+    CONSTRAINT PK_Sessions PRIMARY KEY CLUSTERED (SessionId),
+    CONSTRAINT UQ_Sessions_SessionToken UNIQUE (SessionToken),
+    CONSTRAINT CK_Sessions_ExpiresAt CHECK (ExpiresAt > CreatedAt),
+    CONSTRAINT FK_Sessions_Users FOREIGN KEY (UserId) REFERENCES dbo.Users (UserId)
+);
+GO
+
+-- ---------------------------------------------------------------------------------------------
+-- 10. Supporting indexes for common Part 2 queries
+-- ---------------------------------------------------------------------------------------------
+CREATE NONCLUSTERED INDEX IX_Users_RoleId        ON dbo.Users (RoleId);
+CREATE NONCLUSTERED INDEX IX_Events_EventDate    ON dbo.Events (EventDate);
+CREATE NONCLUSTERED INDEX IX_Events_OrganiserId  ON dbo.Events (OrganiserId);
+CREATE NONCLUSTERED INDEX IX_Enrolments_UserId   ON dbo.Enrolments (UserId);
+CREATE NONCLUSTERED INDEX IX_Enrolments_Category ON dbo.Enrolments (CategoryId);
+CREATE NONCLUSTERED INDEX IX_Sessions_UserId     ON dbo.Sessions (UserId) WHERE IsActive = 1;
+GO
+
