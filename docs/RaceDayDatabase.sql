@@ -261,3 +261,37 @@ INSERT INTO dbo.EventCategories (CategoryId, EventId, CategoryName, MinAge, MaxA
 SET IDENTITY_INSERT dbo.EventCategories OFF;
 GO
 
+-- Enrolments ---------------------------------------------------------------------------------------
+SET IDENTITY_INSERT dbo.Enrolments ON;
+INSERT INTO dbo.Enrolments (EnrolmentId, EventId, UserId, CategoryId, EnrolmentDate, Status) VALUES
+    (1, 1, 3, 3, N'2026-07-02 18:22:00', N'Confirmed'),
+    (2, 1, 4, 2, N'2026-07-04 07:10:00', N'Confirmed'),
+    (3, 1, 5, 1, N'2026-07-05 21:45:00', N'Confirmed'),
+    (4, 2, 4, 6, N'2026-03-18 11:30:00', N'Confirmed'),
+    (5, 2, 6, 5, N'2026-03-19 16:05:00', N'Confirmed'),
+    (6, 3, 3, 9, N'2026-09-12 09:15:00', N'Confirmed'),
+    (7, 3, 6, 8, N'2026-09-14 20:40:00', N'Confirmed');
+SET IDENTITY_INSERT dbo.Enrolments OFF;
+GO
+
+-- Results (only for events already completed: Event 1 and Event 2) --------------------------------
+SET IDENTITY_INSERT dbo.Results ON;
+INSERT INTO dbo.Results (ResultId, EnrolmentId, EventId, FinishTime, FinishingPosition, CapturedAt) VALUES
+    (1, 1, 1, N'00:39:12.500', 1, N'2026-08-15 09:45:00'),
+    (2, 2, 1, N'00:44:03.750', 2, N'2026-08-15 09:50:00'),
+    (3, 3, 1, N'00:47:55.250', 3, N'2026-08-15 09:55:00'),
+    (4, 4, 2, N'00:31:20.000', 1, N'2026-04-26 08:30:00'),
+    (5, 5, 2, N'00:34:48.500', 2, N'2026-04-26 08:35:00');
+SET IDENTITY_INSERT dbo.Results OFF;
+GO
+
+-- Sessions (sample active session for the Part 2 session-management flow) -------------------------
+SET IDENTITY_INSERT dbo.Sessions ON;
+INSERT INTO dbo.Sessions (SessionId, UserId, SessionToken, CreatedAt, ExpiresAt, IsActive) VALUES
+    (1, 3, N'a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90', N'2026-09-20 18:00:00', N'2026-09-21 18:00:00', 0),
+    (2, 1, N'b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90a1', N'2026-09-22 07:30:00', N'2026-09-23 07:30:00', 1);
+SET IDENTITY_INSERT dbo.Sessions OFF;
+GO
+
+PRINT N'RaceDay database created and seeded successfully.';
+GO
