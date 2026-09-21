@@ -199,3 +199,32 @@ CREATE NONCLUSTERED INDEX IX_Enrolments_Category ON dbo.Enrolments (CategoryId);
 CREATE NONCLUSTERED INDEX IX_Sessions_UserId     ON dbo.Sessions (UserId) WHERE IsActive = 1;
 GO
 
+/* =====================================================================================
+   SEED DATA
+   - 2 Organisers, 4 Participants
+   - 3 Events (one per event type: Run, Walk, Cycle) with a route each
+   - Categories for every event
+   - Sample enrolments, and results for the two events already completed
+   ===================================================================================== */
+
+-- Roles ---------------------------------------------------------------------------------------------
+SET IDENTITY_INSERT dbo.Roles ON;
+INSERT INTO dbo.Roles (RoleId, RoleName) VALUES
+    (1, N'Organiser'),
+    (2, N'Participant');
+SET IDENTITY_INSERT dbo.Roles OFF;
+GO
+
+-- Users --------------------------------------------------------------------------------------------
+-- PasswordHash values are placeholder hashes (Part 2 replaces these with BCrypt hashes).
+SET IDENTITY_INSERT dbo.Users ON;
+INSERT INTO dbo.Users (UserId, RoleId, FirstName, LastName, Email, PasswordHash, PhoneNumber, DateOfBirth, IsActive, CreatedAt) VALUES
+    (1, 1, N'Thabo',   N'Mokoena', N'thabo.mokoena@raceday.co.za',   N'$2a$11$PLACEHOLDERHASH000000000000000000000000000000000000', N'082 555 0141', N'1985-03-14', 1, N'2026-06-01 08:00:00'),
+    (2, 1, N'Ayesha',  N'Patel',   N'ayesha.patel@raceday.co.za',    N'$2a$11$PLACEHOLDERHASH000000000000000000000000000000000001', N'083 555 0198', N'1990-07-22', 1, N'2026-06-03 10:15:00'),
+    (3, 2, N'Sipho',   N'Nkosi',   N'sipho.nkosi@gmail.com',         N'$2a$11$PLACEHOLDERHASH000000000000000000000000000000000002', N'071 555 0173', N'1999-11-02', 1, N'2026-06-10 17:40:00'),
+    (4, 2, N'Lerato',  N'Khumalo', N'lerato.khumalo@gmail.com',      N'$2a$11$PLACEHOLDERHASH000000000000000000000000000000000003', N'072 555 0119', N'2003-05-19', 1, N'2026-06-11 09:25:00'),
+    (5, 2, N'Naledi',  N'Sithole', N'naledi.sithole@outlook.com',    N'$2a$11$PLACEHOLDERHASH000000000000000000000000000000000004', N'074 555 0166', N'2005-01-30', 1, N'2026-06-12 12:05:00'),
+    (6, 2, N'Riaan',   N'van Wyk', N'riaan.vanwyk@webmail.co.za',    N'$2a$11$PLACEHOLDERHASH000000000000000000000000000000000005', N'076 555 0127', N'1992-09-08', 1, N'2026-06-14 19:30:00');
+SET IDENTITY_INSERT dbo.Users OFF;
+GO
+
