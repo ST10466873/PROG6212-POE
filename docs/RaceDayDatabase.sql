@@ -228,3 +228,36 @@ INSERT INTO dbo.Users (UserId, RoleId, FirstName, LastName, Email, PasswordHash,
 SET IDENTITY_INSERT dbo.Users OFF;
 GO
 
+-- Events --------------------------------------------------------------------------------------------
+SET IDENTITY_INSERT dbo.Events ON;
+INSERT INTO dbo.Events (EventId, OrganiserId, EventName, Description, EventDate, Location, DistanceKm, EventType) VALUES
+    (1, 1, N'Durban Beachfront 10K',       N'A flat and fast 10km along the Durban promenade, ideal for personal bests.', N'2026-08-15', N'Durban Beachfront, KwaZulu-Natal', 10.00, N'Run'),
+    (2, 2, N'Freedom Day Charity Walk',    N'A family-friendly 5km charity walk raising funds for local schools.',        N'2026-04-26', N'Freedom Park, Pretoria',            5.00,  N'Walk'),
+    (3, 1, N'Table Bay Cycle Challenge',   N'A scenic 40km cycling route around Table Bay with two category climbs.',      N'2026-11-07', N'Cape Town Waterfront, Western Cape', 40.00, N'Cycle');
+SET IDENTITY_INSERT dbo.Events OFF;
+GO
+
+-- Routes --------------------------------------------------------------------------------------------
+SET IDENTITY_INSERT dbo.Routes ON;
+INSERT INTO dbo.Routes (RouteId, EventId, StartPoint, EndPoint, ElevationGainM, GpxTrackUrl) VALUES
+    (1, 1, N'uShaka Beach Car Park',   N'uShaka Beach Car Park',   15,  N'https://raceday.co.za/gpx/durban-10k.gpx'),
+    (2, 2, N'Freedom Park Entrance',   N'Freedom Park Entrance',   20,  N'https://raceday.co.za/gpx/freedom-walk.gpx'),
+    (3, 3, N'V&A Waterfront Clock',    N'V&A Waterfront Clock',    320, N'https://raceday.co.za/gpx/table-bay-40k.gpx');
+SET IDENTITY_INSERT dbo.Routes OFF;
+GO
+
+-- Event categories ---------------------------------------------------------------------------------
+SET IDENTITY_INSERT dbo.EventCategories ON;
+INSERT INTO dbo.EventCategories (CategoryId, EventId, CategoryName, MinAge, MaxAge) VALUES
+    (1, 1, N'Under 20',   NULL, 19),
+    (2, 1, N'Senior',     20,   NULL),
+    (3, 1, N'10km Open',  NULL, NULL),
+    (4, 2, N'Under 20',   NULL, 19),
+    (5, 2, N'Senior',     20,   NULL),
+    (6, 2, N'5km Family', NULL, NULL),
+    (7, 3, N'Under 20',   NULL, 19),
+    (8, 3, N'Senior',     20,   NULL),
+    (9, 3, N'40km Elite', NULL, NULL);
+SET IDENTITY_INSERT dbo.EventCategories OFF;
+GO
+
