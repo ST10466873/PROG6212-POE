@@ -1,0 +1,206 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="1050" viewBox="0 0 1180 1050" font-family="Helvetica, Arial, sans-serif">
+  <rect width="1180" height="1050" fill="#ffffff"/>
+
+  <text x="590" y="32" text-anchor="middle" font-size="20" font-weight="bold" fill="#1f4e79">RaceDay — Entity Relationship Diagram</text>
+  <text x="590" y="52" text-anchor="middle" font-size="12" fill="#555555">PROG6212 Part 1 · 8 entities · matches docs/RaceDayDatabase.sql exactly</text>
+
+  <!-- ============================ EDGES ============================ -->
+  <g stroke="#333333" stroke-width="1.6" fill="none">
+    <!-- Roles 1:N Users -->
+    <line x1="320" y1="103" x2="452" y2="103"/>
+    <!-- Users 1:N Sessions -->
+    <line x1="720" y1="120" x2="852" y2="120"/>
+    <!-- Users 1:N Events (organiser) -->
+    <line x1="560" y1="322" x2="560" y2="412"/>
+    <!-- Events 1:1 Routes -->
+    <line x1="720" y1="480" x2="852" y2="480"/>
+    <!-- Events 1:N EventCategories -->
+    <line x1="460" y1="480" x2="328" y2="480"/>
+    <!-- Events 1:N Enrolments -->
+    <line x1="560" y1="638" x2="560" y2="752"/>
+    <!-- Enrolments 1:1 Results -->
+    <line x1="720" y1="800" x2="852" y2="800"/>
+    <!-- Users 1:N Enrolments (outer left route) -->
+    <polyline points="460,262 35,262 35,900 452,900"/>
+    <!-- EventCategories 1:N Enrolments -->
+    <polyline points="190,572 190,860 452,860"/>
+  </g>
+
+  <!-- Cardinality labels -->
+  <g font-size="13" font-weight="bold" fill="#1f4e79">
+    <text x="330" y="96">1</text>
+    <text x="436" y="96">N</text>
+
+    <text x="730" y="113">1</text>
+    <text x="836" y="113">N</text>
+
+    <text x="568" y="345">1</text>
+    <text x="568" y="404">N</text>
+
+    <text x="730" y="473">1</text>
+    <text x="836" y="473">1</text>
+
+    <text x="436" y="473">1</text>
+    <text x="336" y="473">N</text>
+
+    <text x="568" y="660">1</text>
+    <text x="568" y="744">N</text>
+
+    <text x="730" y="793">1</text>
+    <text x="836" y="793">1</text>
+
+    <text x="410" y="254">1</text>
+    <text x="410" y="892">N</text>
+
+    <text x="200" y="596">1</text>
+    <text x="410" y="852">N</text>
+  </g>
+
+  <!-- Relationship labels -->
+  <g font-size="11" fill="#666666">
+    <text x="386" y="118" text-anchor="middle">has</text>
+    <text x="786" y="135" text-anchor="middle">maintains</text>
+    <text x="560" y="375" text-anchor="middle">creates</text>
+    <text x="786" y="495" text-anchor="middle">describes</text>
+    <text x="394" y="495" text-anchor="middle">categorised by</text>
+    <text x="560" y="700" text-anchor="middle">enters</text>
+    <text x="786" y="815" text-anchor="middle">receives</text>
+    <text x="240" y="254">enrols as participant</text>
+    <text x="300" y="600" transform="rotate(-90 300 600)" text-anchor="middle">selected category</text>
+  </g>
+
+  <!-- Crow's foot ticks at the "N"/many end -->
+  <g stroke="#333333" stroke-width="1.4">
+    <!-- to Users -->
+    <line x1="452" y1="96" x2="440" y2="103"/><line x1="452" y1="110" x2="440" y2="103"/>
+    <!-- to Sessions -->
+    <line x1="852" y1="113" x2="840" y2="120"/><line x1="852" y1="127" x2="840" y2="120"/>
+    <!-- to Events -->
+    <line x1="553" y1="412" x2="560" y2="400"/><line x1="567" y1="412" x2="560" y2="400"/>
+    <!-- to EventCategories -->
+    <line x1="328" y1="473" x2="340" y2="480"/><line x1="328" y1="487" x2="340" y2="480"/>
+    <!-- to Enrolments (from events) -->
+    <line x1="553" y1="752" x2="560" y2="764"/><line x1="567" y1="752" x2="560" y2="764"/>
+    <!-- to Enrolments (from users) -->
+    <line x1="452" y1="893" x2="440" y2="900"/><line x1="452" y1="907" x2="440" y2="900"/>
+    <!-- to Enrolments (from categories) -->
+    <line x1="452" y1="853" x2="440" y2="860"/><line x1="452" y1="867" x2="440" y2="860"/>
+  </g>
+
+  <!-- ============================ ROLES ============================ -->
+  <g>
+    <rect x="60" y="60" width="260" height="86" fill="#f7f9fc" stroke="#1f4e79" stroke-width="1.6"/>
+    <rect x="60" y="60" width="260" height="30" fill="#1f4e79"/>
+    <text x="70" y="80" font-size="14" font-weight="bold" fill="#ffffff">Roles</text>
+    <text x="70" y="110" font-size="12.5"><tspan font-weight="bold" fill="#1f4e79">PK </tspan>RoleId</text>
+    <text x="70" y="132" font-size="12.5"><tspan font-weight="bold" fill="#1f4e79">   </tspan>RoleName  UQ</text>
+  </g>
+
+  <!-- ============================ USERS ============================ -->
+  <g>
+    <rect x="460" y="60" width="260" height="262" fill="#f7f9fc" stroke="#1f4e79" stroke-width="1.6"/>
+    <rect x="460" y="60" width="260" height="30" fill="#1f4e79"/>
+    <text x="470" y="80" font-size="14" font-weight="bold" fill="#ffffff">Users</text>
+    <text x="470" y="110" font-size="12.5"><tspan font-weight="bold" fill="#1f4e79">PK </tspan>UserId</text>
+    <text x="470" y="132" font-size="12.5"><tspan font-weight="bold" fill="#d97706">FK </tspan>RoleId</text>
+    <text x="470" y="154" font-size="12.5">   FirstName</text>
+    <text x="470" y="176" font-size="12.5">   LastName</text>
+    <text x="470" y="198" font-size="12.5">   Email  UQ</text>
+    <text x="470" y="220" font-size="12.5">   PasswordHash</text>
+    <text x="470" y="242" font-size="12.5">   PhoneNumber</text>
+    <text x="470" y="264" font-size="12.5">   DateOfBirth</text>
+    <text x="470" y="286" font-size="12.5">   IsActive</text>
+    <text x="470" y="308" font-size="12.5">   CreatedAt</text>
+  </g>
+
+  <!-- ============================ SESSIONS ============================ -->
+  <g>
+    <rect x="860" y="60" width="260" height="174" fill="#f7f9fc" stroke="#1f4e79" stroke-width="1.6"/>
+    <rect x="860" y="60" width="260" height="30" fill="#1f4e79"/>
+    <text x="870" y="80" font-size="14" font-weight="bold" fill="#ffffff">Sessions</text>
+    <text x="870" y="110" font-size="12.5"><tspan font-weight="bold" fill="#1f4e79">PK </tspan>SessionId</text>
+    <text x="870" y="132" font-size="12.5"><tspan font-weight="bold" fill="#d97706">FK </tspan>UserId</text>
+    <text x="870" y="154" font-size="12.5">   SessionToken  UQ</text>
+    <text x="870" y="176" font-size="12.5">   CreatedAt</text>
+    <text x="870" y="198" font-size="12.5">   ExpiresAt</text>
+    <text x="870" y="220" font-size="12.5">   IsActive</text>
+  </g>
+
+  <!-- ============================ EVENTCATEGORIES ============================ -->
+  <g>
+    <rect x="60" y="420" width="260" height="152" fill="#f7f9fc" stroke="#1f4e79" stroke-width="1.6"/>
+    <rect x="60" y="420" width="260" height="30" fill="#1f4e79"/>
+    <text x="70" y="440" font-size="14" font-weight="bold" fill="#ffffff">EventCategories</text>
+    <text x="70" y="470" font-size="12.5"><tspan font-weight="bold" fill="#1f4e79">PK </tspan>CategoryId</text>
+    <text x="70" y="492" font-size="12.5"><tspan font-weight="bold" fill="#d97706">FK </tspan>EventId</text>
+    <text x="70" y="514" font-size="12.5">   CategoryName</text>
+    <text x="70" y="536" font-size="12.5">   MinAge</text>
+    <text x="70" y="558" font-size="12.5">   MaxAge</text>
+  </g>
+
+  <!-- ============================ EVENTS ============================ -->
+  <g>
+    <rect x="460" y="420" width="260" height="218" fill="#f7f9fc" stroke="#1f4e79" stroke-width="1.6"/>
+    <rect x="460" y="420" width="260" height="30" fill="#1f4e79"/>
+    <text x="470" y="440" font-size="14" font-weight="bold" fill="#ffffff">Events</text>
+    <text x="470" y="470" font-size="12.5"><tspan font-weight="bold" fill="#1f4e79">PK </tspan>EventId</text>
+    <text x="470" y="492" font-size="12.5"><tspan font-weight="bold" fill="#d97706">FK </tspan>OrganiserId</text>
+    <text x="470" y="514" font-size="12.5">   EventName</text>
+    <text x="470" y="536" font-size="12.5">   Description</text>
+    <text x="470" y="558" font-size="12.5">   EventDate</text>
+    <text x="470" y="580" font-size="12.5">   Location</text>
+    <text x="470" y="602" font-size="12.5">   DistanceKm</text>
+    <text x="470" y="624" font-size="12.5">   EventType  CK</text>
+  </g>
+
+  <!-- ============================ ROUTES ============================ -->
+  <g>
+    <rect x="860" y="420" width="260" height="174" fill="#f7f9fc" stroke="#1f4e79" stroke-width="1.6"/>
+    <rect x="860" y="420" width="260" height="30" fill="#1f4e79"/>
+    <text x="870" y="440" font-size="14" font-weight="bold" fill="#ffffff">Routes</text>
+    <text x="870" y="470" font-size="12.5"><tspan font-weight="bold" fill="#1f4e79">PK </tspan>RouteId</text>
+    <text x="870" y="492" font-size="12.5"><tspan font-weight="bold" fill="#d97706">FK </tspan>EventId  UQ</text>
+    <text x="870" y="514" font-size="12.5">   StartPoint</text>
+    <text x="870" y="536" font-size="12.5">   EndPoint</text>
+    <text x="870" y="558" font-size="12.5">   ElevationGainM</text>
+    <text x="870" y="580" font-size="12.5">   GpxTrackUrl</text>
+  </g>
+
+  <!-- ============================ ENROLMENTS ============================ -->
+  <g>
+    <rect x="460" y="760" width="260" height="174" fill="#f7f9fc" stroke="#1f4e79" stroke-width="1.6"/>
+    <rect x="460" y="760" width="260" height="30" fill="#1f4e79"/>
+    <text x="470" y="780" font-size="14" font-weight="bold" fill="#ffffff">Enrolments</text>
+    <text x="470" y="810" font-size="12.5"><tspan font-weight="bold" fill="#1f4e79">PK </tspan>EnrolmentId</text>
+    <text x="470" y="832" font-size="12.5"><tspan font-weight="bold" fill="#d97706">FK </tspan>EventId</text>
+    <text x="470" y="854" font-size="12.5"><tspan font-weight="bold" fill="#d97706">FK </tspan>UserId</text>
+    <text x="470" y="876" font-size="12.5"><tspan font-weight="bold" fill="#d97706">FK </tspan>CategoryId</text>
+    <text x="470" y="898" font-size="12.5">   EnrolmentDate</text>
+    <text x="470" y="920" font-size="12.5">   Status  CK</text>
+  </g>
+
+  <!-- ============================ RESULTS ============================ -->
+  <g>
+    <rect x="860" y="760" width="260" height="174" fill="#f7f9fc" stroke="#1f4e79" stroke-width="1.6"/>
+    <rect x="860" y="760" width="260" height="30" fill="#1f4e79"/>
+    <text x="870" y="780" font-size="14" font-weight="bold" fill="#ffffff">Results</text>
+    <text x="870" y="810" font-size="12.5"><tspan font-weight="bold" fill="#1f4e79">PK </tspan>ResultId</text>
+    <text x="870" y="832" font-size="12.5"><tspan font-weight="bold" fill="#d97706">FK </tspan>EnrolmentId  UQ</text>
+    <text x="870" y="854" font-size="12.5"><tspan font-weight="bold" fill="#d97706">FK </tspan>EventId</text>
+    <text x="870" y="876" font-size="12.5">   FinishTime</text>
+    <text x="870" y="898" font-size="12.5">   FinishingPosition</text>
+    <text x="870" y="920" font-size="12.5">   CapturedAt</text>
+  </g>
+
+  <!-- ============================ LEGEND ============================ -->
+  <g>
+    <rect x="60" y="970" width="1060" height="56" fill="#f2f4f7" stroke="#cccccc"/>
+    <text x="75" y="994" font-size="12.5" font-weight="bold" fill="#333333">Legend:</text>
+    <text x="140" y="994" font-size="12.5"><tspan font-weight="bold" fill="#1f4e79">PK</tspan> Primary Key</text>
+    <text x="265" y="994" font-size="12.5"><tspan font-weight="bold" fill="#d97706">FK</tspan> Foreign Key</text>
+    <text x="390" y="994" font-size="12.5"><tspan font-weight="bold" fill="#1f4e79">1 / N</tspan> One-to-many cardinality</text>
+    <text x="590" y="994" font-size="12.5"><tspan font-weight="bold" fill="#1f4e79">1 / 1</tspan> One-to-one cardinality</text>
+    <text x="790" y="994" font-size="12.5">UQ Unique constraint · CK Check constraint</text>
+    <text x="75" y="1014" font-size="12.5" fill="#555555">Both roles share the Users table, discriminated by Roles.RoleName (Organiser / Participant). Every relationship shows its minimum and maximum participation through its 1:N or 1:1 label.</text>
+  </g>
+</svg>
