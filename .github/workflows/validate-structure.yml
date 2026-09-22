@@ -1,0 +1,86 @@
+name: Validate Repository Structure
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate /docs deliverables
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate required repository structure
+        run: |
+          set -euo pipefail
+          errors=0
+          table_count=0
+          row_count=0
+
+          fail() {
+            echo "::error::$1"
+            errors=1
+          }
+
+          # --- Required top-level files -------------------------------------------------
+          [ -f README.md ] || fail "README.md is missing at the repository root."
+
+          # --- Required /docs folder ----------------------------------------------------
+          [ -d docs ] || fail "The /docs folder is missing."
+
+          # --- ERD must be present as a PNG or PDF -------------------------------------
+          if [ ! -f docs/RaceDay_ERD.png ] && [ ! -f docs/RaceDay_ERD.pdf ]; then
+            fail "ERD not found: docs/RaceDay_ERD.png or docs/RaceDay_ERD.pdf is required."
+          fi
+
+          # --- Endpoint plan must be present (Markdown or PDF) -------------------------
+          if [ ! -f docs/api-endpoint-plan.md ] && [ ! -f docs/api-endpoint-plan.pdf ]; then
+            fail "Endpoint plan not found: docs/api-endpoint-plan.md or .pdf is required."
+          fi
+
+          # --- SQL script must be present ----------------------------------------------
+          [ -f docs/RaceDayDatabase.sql ] || fail "SQL script docs/RaceDayDatabase.sql is missing."
+
+          # --- SQL script sanity checks -------------------------------------------------
+          if [ -f docs/RaceDayDatabase.sql ]; then
+            table_count=$(grep -ic "CREATE TABLE" docs/RaceDayDatabase.sql || true)
+            table_count=${table_count:-0}
+            if [ "$table_count" -lt 6 ]; then
+              fail "SQL script defines $table_count tables; the ERD requires at least 6."
+            fi
+            grep -qi "INSERT INTO" docs/RaceDayDatabase.sql \
+              || fail "SQL script contains no INSERT seed data."
+          fi
+
+          # --- Endpoint plan sanity checks ---------------------------------------------
+          plan_file=""
+          [ -f docs/api-endpoint-plan.md ] && plan_file=docs/api-endpoint-plan.md
+          if [ -n "$plan_file" ]; then
+            for col in "HTTP Method" "Route" "Description" "Role Required" "Request Body" "Expected Response"; do
+              grep -q "$col" "$plan_file" || fail "Endpoint plan is missing the '$col' column."
+            done
+            row_count=$(grep -cE '^\| (GET|POST|PUT|DELETE|PATCH) ' "$plan_file" || true)
+            row_count=${row_count:-0}
+            if [ "$row_count" -lt 5 ]; then
+              fail "Endpoint plan lists only $row_count endpoints; at least 5 are required."
+            fi
+          fi
+
+          # --- CI workflow must exist ---------------------------------------------------
+          ls .github/workflows/*.yml .github/workflows/*.yaml > /dev/null 2>&1 \
+            || fail "No GitHub Actions workflow found in .github/workflows/."
+
+          if [ "$errors" -ne 0 ]; then
+            echo "Repository structure validation FAILED."
+            exit 1
+          fi
+
+          echo "Repository structure OK:"
+          echo "  - README.md present"
+          echo "  - docs/ folder present with ERD, endpoint plan and SQL script"
+          echo "  - SQL script defines $table_count tables and seed data"
+          echo "  - Endpoint plan defines $row_count endpoints with all six required columns"
