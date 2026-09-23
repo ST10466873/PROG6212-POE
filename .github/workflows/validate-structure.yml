@@ -70,9 +70,10 @@ jobs:
             fi
           fi
 
-          # --- CI workflow must exist ---------------------------------------------------
-          ls .github/workflows/*.yml .github/workflows/*.yaml > /dev/null 2>&1 \
-            || fail "No GitHub Actions workflow found in .github/workflows/."
+          # --- CI workflow must exist (accept .yml or .yaml) ----------------------------
+          if ! find .github/workflows -maxdepth 1 \( -name '*.yml' -o -name '*.yaml' \) -print -quit | grep -q .; then
+            fail "No GitHub Actions workflow found in .github/workflows/."
+          fi
 
           if [ "$errors" -ne 0 ]; then
             echo "Repository structure validation FAILED."
