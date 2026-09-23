@@ -60,12 +60,7 @@ The GitHub Actions workflow at [`.github/workflows/validate-structure.yml`](.git
 
 **Screenshot of a successful green build:** _(to be added after the first push — `docs/images/ci-build-screenshot.png`)_ ![CI green build](docs/images/ci-build-screenshot.png)
 
-## 6. Video presentation
-
-**Unlisted YouTube walkthrough:** _(link to be added — covers the planning documents, ERD decisions, endpoint plan choices, and a live run of the SQL script in SSMS)_
-`https://youtu.be/TODO`
-
-## 7. Marking deliverables checklist (Part 1)
+## 6. Marking deliverables checklist (Part 1)
 
 - [x] `/docs` folder with ERD (PNG), endpoint plan (Markdown) and SQL script
 - [x] ERD with 8 entities, primary keys, foreign keys and cardinality on every relationship
@@ -74,9 +69,8 @@ The GitHub Actions workflow at [`.github/workflows/validate-structure.yml`](.git
 - [x] GitHub Actions workflow validating the repository structure
 - [ ] 20+ meaningful commits pushed to GitHub
 - [ ] CI green build screenshot in this README
-- [ ] Unlisted YouTube video link in this README
 
-## 8. AI tooling disclosure
+## 7. AI tooling disclosure
 
 AI tooling (an AI coding assistant) was used while preparing this portfolio, as permitted by the module instructions, and is disclosed here in line with the assignment requirement.¹ All planning content — the data model, endpoint design, seed data choices and this README — was directed, reviewed, corrected and approved by me before being committed, and the same disclosure applies to Parts 2 and 3 where AI assistance is used for planning, proofreading or coding.
 
