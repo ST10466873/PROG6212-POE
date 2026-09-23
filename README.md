@@ -58,7 +58,9 @@ The authoritative check runs on every push — see below.
 
 The GitHub Actions workflow at [`.github/workflows/validate-structure.yml`](.github/workflows/validate-structure.yml) runs on every push and pull request. It validates that the `/docs` folder exists and contains the required deliverables (ERD image, endpoint plan with all six required columns, SQL script defining at least six tables plus seed data), and that a CI workflow is present.
 
-**Screenshot of a successful green build:** _(to be added after the first push — `docs/images/ci-build-screenshot.png`)_ ![CI green build](docs/images/ci-build-screenshot.png)
+**Screenshot of a successful green build:**
+
+![CI green build — Validate Repository Structure workflow passing](docs/images/ci-build-screenshot.png)
 
 ## 6. Marking deliverables checklist (Part 1)
 
@@ -67,8 +69,8 @@ The GitHub Actions workflow at [`.github/workflows/validate-structure.yml`](.git
 - [x] Endpoint plan with all six required columns covering all Part 2 functional requirements (22 endpoints)
 - [x] SQL script runs on a clean SQL Server instance and matches the ERD exactly
 - [x] GitHub Actions workflow validating the repository structure
-- [ ] 20+ meaningful commits pushed to GitHub
-- [ ] CI green build screenshot in this README
+- [x] 20+ meaningful commits pushed to GitHub
+- [x] CI green build screenshot in this README
 
 ## 7. AI tooling disclosure
 
