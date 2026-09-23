@@ -31,7 +31,9 @@ Role-based access is enforced at the API level in Part 2 and reflected consisten
     ├── RaceDay_ERD.png                ← Section A: Entity Relationship Diagram
     ├── RaceDay_ERD.svg                ← editable source of the ERD
     ├── api-endpoint-plan.md           ← Section B: API endpoint plan
-    └── RaceDayDatabase.sql            ← Section C: full SQL schema + seed data
+    ├── RaceDayDatabase.sql            ← Section C: full SQL schema + seed data
+    └── tests/
+        └── RaceDay_Database_Tests.sql ← 22 tests: every table, constraint and integrity rule
 ```
 
 ## 4. Setup instructions
@@ -45,6 +47,7 @@ No tooling required — open `docs/api-endpoint-plan.md` and `docs/RaceDay_ERD.p
 3. Press **F5** (or click **Execute**) to run the script on a clean instance.
 4. The script creates the `RaceDay` database, all eight tables with their primary keys, foreign keys and constraints, supporting indexes, and seeds realistic sample data (2 Organisers, 4 Participants, 3 Events, 3 routes, 9 categories, 7 enrolments, 5 results and 2 sessions).
 5. Verify with `USE RaceDay; SELECT * FROM dbo.Events;`.
+6. **Run the test suite:** open `docs/tests/RaceDay_Database_Tests.sql` and press **F5**. It tests every table, constraint and relationship (22 tests) and finishes with `ALL TESTS PASSED` — it never modifies your data (all inserts are rolled back).
 
 The script is re-runnable: it drops and recreates the `RaceDay` tables if they already exist.
 
@@ -68,6 +71,7 @@ The GitHub Actions workflow at [`.github/workflows/validate-structure.yml`](.git
 - [x] ERD with 8 entities, primary keys, foreign keys and cardinality on every relationship
 - [x] Endpoint plan with all six required columns covering all Part 2 functional requirements (22 endpoints)
 - [x] SQL script runs on a clean SQL Server instance and matches the ERD exactly
+- [x] Database test suite — 22 tests covering every table, constraint, relationship and the brief's seed minimums
 - [x] GitHub Actions workflow validating the repository structure
 - [x] 20+ meaningful commits pushed to GitHub
 - [x] CI green build screenshot in this README

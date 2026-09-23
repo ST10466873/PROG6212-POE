@@ -37,6 +37,7 @@ jobs:
           errors=0
           table_count=0
           row_count=0
+          test_count=0
 
           fail() {
             echo "::error::$1"
@@ -69,7 +70,7 @@ jobs:
           # The ERD defines 8 entities, so the script must create at least 6 tables
           # (the brief's minimum) and must contain seed data as required in Section C.
           if [ -f docs/RaceDayDatabase.sql ]; then
-            table_count=$(grep -ic "CREATE TABLE" docs/RaceDayDatabase.sql || true)
+            table_count=$(grep -icE "^[[:space:]]*CREATE TABLE" docs/RaceDayDatabase.sql || true)
             table_count=${table_count:-0}
             if [ "$table_count" -lt 6 ]; then
               fail "SQL script defines $table_count tables; the ERD requires at least 6."
@@ -102,6 +103,40 @@ jobs:
             fail "No GitHub Actions workflow found in .github/workflows/."
           fi
 
+          # --- Database test suite must be present -------------------------------------
+          # Part 1 contains no application code by design (no classes exist yet - class
+          # unit tests are written in Part 2), so the objects that DO exist - the eight
+          # tables and their constraints - are covered by a T-SQL suite run in SSMS.
+          [ -f docs/tests/RaceDay_Database_Tests.sql ] || fail "Database test suite docs/tests/RaceDay_Database_Tests.sql is missing."
+          test_count=$(grep -c "PRINT N'PASS" docs/tests/RaceDay_Database_Tests.sql || true)
+          test_count=${test_count:-0}
+          if [ "$test_count" -lt 10 ]; then
+            fail "Test suite defines $test_count tests; at least 10 expected."
+          fi
+
+          # --- ERD and SQL must describe the same schema -------------------------------
+          # The brief requires the SQL script to match the ERD exactly, so compare the
+          # entity boxes in the diagram with the CREATE TABLE statements mechanically.
+          if [ -f docs/RaceDay_ERD.svg ] && [ -f docs/RaceDayDatabase.sql ]; then
+            erd_entities=$(grep -oE 'fill="#ffffff">[A-Za-z]+<' docs/RaceDay_ERD.svg | sed -e 's/.*">//' -e 's/<//' | sort)
+            sql_tables=$(grep -oE 'CREATE TABLE [A-Za-z]+\.[A-Za-z]+' docs/RaceDayDatabase.sql | sed 's/CREATE TABLE [A-Za-z]*\.//' | sort)
+            if [ "$erd_entities" != "$sql_tables" ]; then
+              fail "ERD entities and SQL CREATE TABLE statements do not match."
+            fi
+          fi
+
+          # --- Seed coverage required by the brief -------------------------------------
+          # Minimum: two Organisers (RoleId 1), two Participants (RoleId 2), three Events.
+          if [ -f docs/RaceDayDatabase.sql ]; then
+            organisers=$(awk '/INSERT INTO dbo.Users/{f=1} /SET IDENTITY_INSERT dbo.Users OFF/{f=0} f' docs/RaceDayDatabase.sql | grep -cE '^[[:space:]]*\([0-9]+, 1,' || true)
+            participants=$(awk '/INSERT INTO dbo.Users/{f=1} /SET IDENTITY_INSERT dbo.Users OFF/{f=0} f' docs/RaceDayDatabase.sql | grep -cE '^[[:space:]]*\([0-9]+, 2,' || true)
+            event_rows=$(awk '/INSERT INTO dbo.Events/{f=1} /SET IDENTITY_INSERT dbo.Events OFF/{f=0} f' docs/RaceDayDatabase.sql | grep -cE '^[[:space:]]*\([0-9]+,' || true)
+            organisers=${organisers:-0}; participants=${participants:-0}; event_rows=${event_rows:-0}
+            [ "$organisers" -ge 2 ]   || fail "Seed data has $organisers Organiser(s); the brief requires at least 2."
+            [ "$participants" -ge 2 ] || fail "Seed data has $participants Participant(s); the brief requires at least 2."
+            [ "$event_rows" -ge 3 ]   || fail "Seed data has $event_rows Event(s); the brief requires at least 3."
+          fi
+
           # --- Result -------------------------------------------------------------------
           # Exit non-zero if anything failed, so the build badge turns red and the
           # problem is visible directly in the commit's check summary.
@@ -115,3 +150,5 @@ jobs:
           echo "  - docs/ folder present with ERD, endpoint plan and SQL script"
           echo "  - SQL script defines $table_count tables and seed data"
           echo "  - Endpoint plan defines $row_count endpoints with all six required columns"
+          echo "  - Database test suite present with $test_count tests"
+          echo "  - ERD entities match the SQL tables; seed data meets the brief minimums"
