@@ -1,5 +1,16 @@
+# =====================================================================================
+# Validate Repository Structure
+# -------------------------------------------------------------------------------------
+# Purpose : Part 1 of the POE requires a GitHub Actions workflow that validates the
+#           repository structure - specifically that the /docs folder exists and
+#           contains the required deliverables (ERD image, endpoint plan, SQL script).
+# Trigger : Runs on every push and pull request so any missing or malformed deliverable
+#           is caught immediately, and produces the green build shown in the README.
+# =====================================================================================
 name: Validate Repository Structure
 
+# Run on every push and PR to main; workflow_dispatch allows a manual re-run from the
+# Actions tab (useful when regenerating the CI screenshot for the README).
 on:
   push:
   pull_request:
@@ -11,9 +22,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout is required - without it the runner's workspace is empty and every
+      # file check below would fail against nothing.
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # The validation script uses bash with -e (fail fast on any unexpected error).
+      # Custom 'fail' messages are collected in $errors so the run reports EVERY
+      # problem in one pass instead of stopping at the first missing file - much
+      # friendlier when fixing a submission.
       - name: Validate required repository structure
         run: |
           set -euo pipefail
@@ -33,19 +50,24 @@ jobs:
           [ -d docs ] || fail "The /docs folder is missing."
 
           # --- ERD must be present as a PNG or PDF -------------------------------------
+          # The brief allows either format; at least one must exist.
           if [ ! -f docs/RaceDay_ERD.png ] && [ ! -f docs/RaceDay_ERD.pdf ]; then
             fail "ERD not found: docs/RaceDay_ERD.png or docs/RaceDay_ERD.pdf is required."
           fi
 
           # --- Endpoint plan must be present (Markdown or PDF) -------------------------
+          # Section B of the assignment accepts a Markdown or PDF submission.
           if [ ! -f docs/api-endpoint-plan.md ] && [ ! -f docs/api-endpoint-plan.pdf ]; then
             fail "Endpoint plan not found: docs/api-endpoint-plan.md or .pdf is required."
           fi
 
           # --- SQL script must be present ----------------------------------------------
+          # Section C requires the script as a .sql file inside /docs.
           [ -f docs/RaceDayDatabase.sql ] || fail "SQL script docs/RaceDayDatabase.sql is missing."
 
           # --- SQL script sanity checks -------------------------------------------------
+          # The ERD defines 8 entities, so the script must create at least 6 tables
+          # (the brief's minimum) and must contain seed data as required in Section C.
           if [ -f docs/RaceDayDatabase.sql ]; then
             table_count=$(grep -ic "CREATE TABLE" docs/RaceDayDatabase.sql || true)
             table_count=${table_count:-0}
@@ -57,12 +79,15 @@ jobs:
           fi
 
           # --- Endpoint plan sanity checks ---------------------------------------------
+          # Section B mandates six specific columns for every endpoint row; missing any
+          # of them is a marking penalty, so each one is verified individually.
           plan_file=""
           [ -f docs/api-endpoint-plan.md ] && plan_file=docs/api-endpoint-plan.md
           if [ -n "$plan_file" ]; then
             for col in "HTTP Method" "Route" "Description" "Role Required" "Request Body" "Expected Response"; do
               grep -q "$col" "$plan_file" || fail "Endpoint plan is missing the '$col' column."
             done
+            # Count actual endpoint rows: table lines that begin with an HTTP verb.
             row_count=$(grep -cE '^\| (GET|POST|PUT|DELETE|PATCH) ' "$plan_file" || true)
             row_count=${row_count:-0}
             if [ "$row_count" -lt 5 ]; then
@@ -71,10 +96,15 @@ jobs:
           fi
 
           # --- CI workflow must exist (accept .yml or .yaml) ----------------------------
+          # Note: use find rather than `ls *.yml *.yaml` - ls exits non-zero when one of
+          # the globs matches nothing, which previously caused a false failure here.
           if ! find .github/workflows -maxdepth 1 \( -name '*.yml' -o -name '*.yaml' \) -print -quit | grep -q .; then
             fail "No GitHub Actions workflow found in .github/workflows/."
           fi
 
+          # --- Result -------------------------------------------------------------------
+          # Exit non-zero if anything failed, so the build badge turns red and the
+          # problem is visible directly in the commit's check summary.
           if [ "$errors" -ne 0 ]; then
             echo "Repository structure validation FAILED."
             exit 1
