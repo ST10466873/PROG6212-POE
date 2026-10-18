@@ -47,7 +47,7 @@ Role-based access is enforced at the API level in Part 2 and reflected consisten
 │   ├── Helpers/SessionHelper.cs← X-Session-Token / Bearer extraction
 │   ├── Program.cs              ← DI, Swagger, DB creation
 │   └── appsettings.json        ← SQL Server connection (LocalDB default)
-└── tests/RaceDay.Tests/        ← Part 2: xUnit suite (17 tests)
+└── tests/RaceDay.Tests/        ← Part 2: xUnit suite (16 tests)
     ├── AuthTests.cs
     ├── EventTests.cs
     ├── EnrolmentTests.cs
@@ -98,7 +98,7 @@ Connection string is in `src/RaceDay.Api/appsettings.json`:
 
 ```bash
 dotnet test
-# 17 tests: Auth (4) + Events (4) + Enrolments (4) + Integration (4) + unit
+# 16 tests: Auth (4) + Events (4) + Enrolments (4) + Integration (4) + unit
 ```
 
 Tests use EF Core InMemory with isolated databases — no SQL Server required.
@@ -144,7 +144,7 @@ Error codes match the plan: `400` validation, `401` unauthenticated, `403` forbi
 ## 6. CI/CD
 
 * **`validate-structure.yml`** — runs on every push/PR. Checks `/docs` deliverables, 6 required endpoint-plan columns, ≥6 tables + seed data, ≥10 DB tests, ERD vs SQL entity match. Produces the green badge in the README.
-* **`ci-api.yml`** — builds the solution and runs `dotnet test` on `ubuntu-latest` with .NET 10. Fails the build if any of the 17 tests fail.
+* **`ci-api.yml`** — builds the solution and runs `dotnet test` on `ubuntu-latest` with .NET 10. Fails the build if any of the 16 tests fail.
 
 Both must be green — see Actions tab.
 
@@ -172,7 +172,7 @@ Both must be green — see Actions tab.
 - [x] Error handling with consistent JSON `{ message }` and correct status codes
 - [x] Swagger UI at `/swagger` and `/health` endpoint
 - [x] Dockerfile + docker-compose (API + SQL Server)
-- [x] xUnit test suite — 17 tests (unit + integration via WebApplicationFactory, isolated InMemory DBs)
+- [x] xUnit test suite — 16 tests (unit + integration via WebApplicationFactory, isolated InMemory DBs)
 - [x] GitHub Actions `ci-api` workflow (build + test)
 - [x] 12+ additional spaced commits for Part 2
 - [x] README with setup, endpoint table and architecture
