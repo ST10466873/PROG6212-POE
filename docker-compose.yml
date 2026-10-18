@@ -1,0 +1,22 @@
+services:
+  api:
+    build: .
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__RaceDay=Server=db;Database=RaceDay;User Id=sa;Password=RaceDay123!;TrustServerCertificate=True
+    depends_on:
+      - db
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=RaceDay123!
+    ports:
+      - "1433:1433"
+    volumes:
+      - raceday_data:/var/opt/mssql
+
+volumes:
+  raceday_data:
