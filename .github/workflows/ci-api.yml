@@ -1,0 +1,38 @@
+name: CI - Build and Test API
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build and test RaceDay API
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test --no-build --configuration Release --verbosity normal
+
+      - name: Validate docs structure (re-run Part 1 checks)
+        run: |
+          set -e
+          [ -f docs/RaceDay_ERD.png ] || { echo "::error::ERD missing"; exit 1; }
+          [ -f docs/api-endpoint-plan.md ] || { echo "::error::Endpoint plan missing"; exit 1; }
+          [ -f docs/RaceDayDatabase.sql ] || { echo "::error::SQL script missing"; exit 1; }
+          tables=$(grep -icE "^[[:space:]]*CREATE TABLE" docs/RaceDayDatabase.sql || true)
+          [ "$tables" -ge 6 ] || { echo "::error::Only $tables tables"; exit 1; }
+          echo "Docs OK ($tables tables)"
