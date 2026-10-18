@@ -233,5 +233,4 @@ Part 3 will extend RaceDay with an ASP.NET Core MVC web application in `src/Race
 - Docker. (n.d.). *Docker documentation*. https://docs.docker.com/
 
 **Repository:** [https://github.com/ST10466873/PROG6212-POE](https://github.com/ST10466873/PROG6212-POE)  
-**Repository:** [https://github.com/ST10466873/PROG6212-POE](https://github.com/ST10466873/PROG6212-POE)
 **Solution:** RaceDay.slnx (contains RaceDay.Api and RaceDay.Tests)
