@@ -204,6 +204,9 @@ All endpoints match [`docs/api-endpoint-plan.md`](docs/api-endpoint-plan.md) exa
 
 ## 9. Continuous Integration (CI)
 
+<img width="1870" height="898" alt="Capture" src="https://github.com/user-attachments/assets/7f213046-e9a3-4aee-ba94-13ca8927d30b" />
+
+
 GitHub Actions workflows run on push, pull request and manual dispatch:
 
 - **[validate-structure.yml](.github/workflows/validate-structure.yml)** – Re-validates Part 1 artefacts: ERD, endpoint plan, SQL script, and minimum table count (≥6). Runs on Ubuntu.
