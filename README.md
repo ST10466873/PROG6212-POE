@@ -143,6 +143,8 @@ Error codes match the plan: `400` validation, `401` unauthenticated, `403` forbi
 
 ## 6. CI/CD
 
+<img width="1870" height="898" alt="Capture" src="https://github.com/user-attachments/assets/7b15bf4f-77e6-4e02-a9f5-84b41651d1eb" />
+
 * **`validate-structure.yml`** — runs on every push/PR. Checks `/docs` deliverables, 6 required endpoint-plan columns, ≥6 tables + seed data, ≥10 DB tests, ERD vs SQL entity match. Produces the green badge in the README.
 * **`ci-api.yml`** — builds the solution and runs `dotnet test` on `ubuntu-latest` with .NET 10. Fails the build if any of the 16 tests fail.
 
