@@ -1,13 +1,13 @@
-# RaceDay
+﻿# RaceDay
 
-**PROG6212 – Programming 2B | Portfolio of Evidence (POE)**  
-**Current Status:** Part 1 – System Planning and Database ✅ | Part 2 – RESTful API ✅ | Part 3 – MVC Web Application (planned)
+**PROG6212 â€“ Programming 2B | Portfolio of Evidence (POE)**  
+**Current Status:** Part 1 â€“ System Planning and Database âœ… | Part 2 â€“ RESTful API âœ… | Part 3 â€“ MVC Web Application (planned)
 
 ---
 
 ## 1. System Description
 
-**RaceDay** is a full-stack web-based event management system built for the South African running, walking and cycling community — from major events like the Comrades Marathon and Two Oceans, to weekend park runs and charity cycles. Many organisers still rely on paper-based registration, spreadsheets and disconnected communication channels.
+**RaceDay** is a full-stack web-based event management system built for the South African running, walking and cycling community â€” from major events like the Comrades Marathon and Two Oceans, to weekend park runs and charity cycles. Many organisers still rely on paper-based registration, spreadsheets and disconnected communication channels.
 
 RaceDay replaces this with a single API-driven platform where **Event Organisers** can create and manage events, categories and participant results, while **Participants** can browse upcoming events, enrol by category, track their personal history and view event results. The system has been designed to be extensible to an MVC web interface in Part 3 and is fully containerised.
 
@@ -28,36 +28,36 @@ Role-based access is enforced at the API layer (Part 2) and will be consistently
 
 ```text
 /
-├── README.md                        # This file (submission overview)
-├── RaceDay.slnx                     # Solution containing API and test projects
-├── Dockerfile                       # API container build
-├── docker-compose.yml               # API + SQL Server stack
-├── .github/workflows/
-│   ├── validate-structure.yml       # CI: validates Part 1 documentation structure
-│   └── ci-api.yml                   # CI: builds API and runs all tests
-├── docs/
-│   ├── RaceDay_ERD.png              # Section A: Entity Relationship Diagram
-│   ├── RaceDay_ERD.svg              # Editable ERD source
-│   ├── api-endpoint-plan.md         # Section B: 22-endpoint RESTful API plan
-│   ├── RaceDayDatabase.sql          # Section C: Complete SQL schema + seed data
-│   └── tests/
-│       └── RaceDay_Database_Tests.sql # 22 database integrity tests
-├── src/RaceDay.Api/                 # Part 2: ASP.NET Core Web API (.NET 10)
-│   ├── Controllers/                 # 6 controllers (Auth, Users, Events, Categories, Enrolments, Results)
-│   ├── Models/                      # 8 domain entities matching the ERD (Role, User, Event, Route, EventCategory, Enrolment, Result, Session)
-│   ├── Data/RaceDayContext.cs       # EF Core DbContext with PKs, FKs, UQs, CKs and seed data
-│   ├── DTOs/AuthDtos.cs             # Request/response DTOs mapped to all endpoints
-│   ├── Services/AuthService.cs      # BCrypt.Net-Next hashing + session token generation/validation
-│   ├── Helpers/SessionHelper.cs     # Session extraction (X-Session-Token or Bearer) + 401/403 helpers
-│   ├── Program.cs                   # DI, Swagger, DB creation, health check, InMemory/SQL selection
-│   ├── appsettings.json             # Connection strings (LocalDB default)
-│   └── RaceDay.Api.http             # HTTP request samples for testing
-└── tests/RaceDay.Tests/             # Part 2: xUnit test suite (16 tests)
-    ├── TestHelpers.cs               # Factory + helpers for isolated test DBs
-    ├── AuthTests.cs                 # 4 auth/session tests
-    ├── EventTests.cs                # 4 event management tests
-    ├── EnrolmentTests.cs            # 4 enrolment/category/result logic tests
-    └── ApiIntegrationTests.cs       # 4 integration tests via WebApplicationFactory
+â”œâ”€â”€ README.md                        # This file (submission overview)
+â”œâ”€â”€ RaceDay.slnx                     # Solution containing API and test projects
+â”œâ”€â”€ Dockerfile                       # API container build
+â”œâ”€â”€ docker-compose.yml               # API + SQL Server stack
+â”œâ”€â”€ .github/workflows/
+â”‚   â”œâ”€â”€ validate-structure.yml       # CI: validates Part 1 documentation structure
+â”‚   â””â”€â”€ ci-api.yml                   # CI: builds API and runs all tests
+â”œâ”€â”€ docs/
+â”‚   â”œâ”€â”€ RaceDay_ERD.png              # Section A: Entity Relationship Diagram
+â”‚   â”œâ”€â”€ RaceDay_ERD.svg              # Editable ERD source
+â”‚   â”œâ”€â”€ api-endpoint-plan.md         # Section B: 22-endpoint RESTful API plan
+â”‚   â”œâ”€â”€ RaceDayDatabase.sql          # Section C: Complete SQL schema + seed data
+â”‚   â””â”€â”€ tests/
+â”‚       â””â”€â”€ RaceDay_Database_Tests.sql # 22 database integrity tests
+â”œâ”€â”€ src/RaceDay.Api/                 # Part 2: ASP.NET Core Web API (.NET 10)
+â”‚   â”œâ”€â”€ Controllers/                 # 6 controllers (Auth, Users, Events, Categories, Enrolments, Results)
+â”‚   â”œâ”€â”€ Models/                      # 8 domain entities matching the ERD (Role, User, Event, Route, EventCategory, Enrolment, Result, Session)
+â”‚   â”œâ”€â”€ Data/RaceDayContext.cs       # EF Core DbContext with PKs, FKs, UQs, CKs and seed data
+â”‚   â”œâ”€â”€ DTOs/AuthDtos.cs             # Request/response DTOs mapped to all endpoints
+â”‚   â”œâ”€â”€ Services/AuthService.cs      # BCrypt.Net-Next hashing + session token generation/validation
+â”‚   â”œâ”€â”€ Helpers/SessionHelper.cs     # Session extraction (X-Session-Token or Bearer) + 401/403 helpers
+â”‚   â”œâ”€â”€ Program.cs                   # DI, Swagger, DB creation, health check, InMemory/SQL selection
+â”‚   â”œâ”€â”€ appsettings.json             # Connection strings (LocalDB default)
+â”‚   â””â”€â”€ RaceDay.Api.http             # HTTP request samples for testing
+â””â”€â”€ tests/RaceDay.Tests/             # Part 2: xUnit test suite (16 tests)
+    â”œâ”€â”€ TestHelpers.cs               # Factory + helpers for isolated test DBs
+    â”œâ”€â”€ AuthTests.cs                 # 4 auth/session tests
+    â”œâ”€â”€ EventTests.cs                # 4 event management tests
+    â”œâ”€â”€ EnrolmentTests.cs            # 4 enrolment/category/result logic tests
+    â””â”€â”€ ApiIntegrationTests.cs       # 4 integration tests via WebApplicationFactory
 ```
 
 ---
@@ -65,25 +65,25 @@ Role-based access is enforced at the API layer (Part 2) and will be consistently
 ## 4. Prerequisites
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download) installed
-- [SQL Server](https://learn.microsoft.com/en-us/sql/sql-server/) (LocalDB is sufficient, e.g. `(localdb)\MSSQLLocalDB`) — the API automatically falls back to InMemory if SQL Server is unavailable (used by tests)
+- [SQL Server](https://learn.microsoft.com/en-us/sql/sql-server/) (LocalDB is sufficient, e.g. `(localdb)\MSSQLLocalDB`) â€” the API automatically falls back to InMemory if SQL Server is unavailable (used by tests)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (optional, for containerised run)
 - [SQL Server Management Studio (SSMS)](https://learn.microsoft.com/en-us/sql/ssms/) (optional, to run Part 1 SQL scripts)
 
 ---
 
-## 5. Part 1 – Database Setup and Validation
+## 5. Part 1 â€“ Database Setup and Validation
 
 The planning and database artefacts are located in `/docs/`.
 
 ### 5.1 View Planning Documents
 - **ERD:** [docs/RaceDay_ERD.png](docs/RaceDay_ERD.png) (also [SVG](docs/RaceDay_ERD.svg))
-- **API Endpoint Plan:** [docs/api-endpoint-plan.md](docs/api-endpoint-plan.md) – documents all 22 endpoints, roles, rules, status codes and example payloads
-- **Database Script:** [docs/RaceDayDatabase.sql](docs/RaceDayDatabase.sql) – full DDL + DML (seed data)
-- **Database Tests:** [docs/tests/RaceDay_Database_Tests.sql](docs/tests/RaceDay_Database_Tests.sql) – 22 integrity tests
+- **API Endpoint Plan:** [docs/api-endpoint-plan.md](docs/api-endpoint-plan.md) â€“ documents all 22 endpoints, roles, rules, status codes and example payloads
+- **Database Script:** [docs/RaceDayDatabase.sql](docs/RaceDayDatabase.sql) â€“ full DDL + DML (seed data)
+- **Database Tests:** [docs/tests/RaceDay_Database_Tests.sql](docs/tests/RaceDay_Database_Tests.sql) â€“ 22 integrity tests
 
 ### 5.2 Execute the SQL Schema (SSMS)
 1. Open **SQL Server Management Studio** and connect to your instance (e.g. `localhost` or `.\SQLEXPRESS`).
-2. Go to **File → Open → File…** and select [`docs/RaceDayDatabase.sql`](docs/RaceDayDatabase.sql).
+2. Go to **File â†’ Open â†’ Fileâ€¦** and select [`docs/RaceDayDatabase.sql`](docs/RaceDayDatabase.sql).
 3. Execute with **F5**. This will create the `RaceDay` database with 8 tables, all constraints (PKs/FKs/UQs/CKs), indexes and seed data.
 4. Verify with: `USE RaceDay; SELECT * FROM dbo.Events;`
 
@@ -95,7 +95,7 @@ The planning and database artefacts are located in `/docs/`.
 
 ---
 
-## 6. Part 2 – RESTful API (.NET 10)
+## 6. Part 2 â€“ RESTful API (.NET 10)
 
 The API implements **exactly 22 endpoints** as specified in [docs/api-endpoint-plan.md](docs/api-endpoint-plan.md). All constraints from the ERD are enforced (unique emails/events/categories/enrolments/positions, CHECKs for roles/event types/distances, ownership checks and age bounds).
 
@@ -106,13 +106,13 @@ Defined in [`src/RaceDay.Api/appsettings.json`](src/RaceDay.Api/appsettings.json
 
 Authentication: server-side **Sessions** table. Tokens are 64-hex strings (32 random bytes) with a 24-hour expiry. Clients send the token via `X-Session-Token: <token>` or `Authorization: Bearer <token>`. Passwords are hashed using **BCrypt.Net-Next 4.0.3** (cost 11).
 
-### 6.2 Run the API – Visual Studio
+### 6.2 Run the API â€“ Visual Studio
 1. Open [`RaceDay.slnx`](RaceDay.slnx) in Visual Studio 2022/2026.
 2. Set **`RaceDay.Api`** as the startup project.
 3. Press **F5** (HTTPS). Swagger UI will open at `https://localhost:5001/swagger`.
 4. Health endpoint: `https://localhost:5001/health` returns `{ status: "ok", timestamp: ... }`.
 
-### 6.3 Run the API – .NET CLI
+### 6.3 Run the API â€“ .NET CLI
 ```bash
 # From repository root
 dotnet restore
@@ -124,7 +124,7 @@ dotnet run --project src/RaceDay.Api
 - Root redirects to `/swagger`  
 - Health: `https://localhost:5001/health`
 
-### 6.4 Run the API – Docker Compose
+### 6.4 Run the API â€“ Docker Compose
 ```bash
 docker compose up --build
 ```
@@ -139,23 +139,23 @@ dotnet test
 ```
 
 **Test Results (16/16 passing):**
-- **AuthTests.cs** (4) – Registration validation, duplicate email (409), login success/failure, BCrypt cost verification
-- **EventTests.cs** (4) – Event creation (organiser), duplicate prevention (409), update/delete ownership (403), public listing
-- **EnrolmentTests.cs** (4) – Enrolment rules (participant only), duplicate enrolment (409), organiser views enrolments, age/category constraints, result uniqueness (409 on duplicate position)
-- **ApiIntegrationTests.cs** (4) – Full HTTP integration via `WebApplicationFactory<Program>` covering registration/login, event creation, enrolment and results flow across the 22 endpoints
+- **AuthTests.cs** (4) â€“ Registration validation, duplicate email (409), login success/failure, BCrypt cost verification
+- **EventTests.cs** (4) â€“ Event creation (organiser), duplicate prevention (409), update/delete ownership (403), public listing
+- **EnrolmentTests.cs** (4) â€“ Enrolment rules (participant only), duplicate enrolment (409), organiser views enrolments, age/category constraints, result uniqueness (409 on duplicate position)
+- **ApiIntegrationTests.cs** (4) â€“ Full HTTP integration via `WebApplicationFactory<Program>` covering registration/login, event creation, enrolment and results flow across the 22 endpoints
 
 All tests run against isolated InMemory databases; no external SQL Server is required.
 
 ### 6.6 Quick API Flow (Manual Test)
-1. **Register Organiser** → `POST /api/auth/register` (`Role: "Organiser"`)
-2. **Login** → `POST /api/auth/login` → copy `sessionToken`
-3. **Authorise in Swagger** → Add `X-Session-Token` header (or Bearer)
-4. **Create Event** → `POST /api/events`
-5. **Add Category** → `POST /api/events/{id}/categories`
-6. **Register Participant** → separate session
-7. **Enrol** → `POST /api/events/{id}/enrolments` (Participant)
-8. **Capture Result** → back as Organiser → `POST /api/enrolments/{id}/result`
-9. **View Public Results** → `GET /api/events/{id}/results` (no auth required)
+1. **Register Organiser** â†’ `POST /api/auth/register` (`Role: "Organiser"`)
+2. **Login** â†’ `POST /api/auth/login` â†’ copy `sessionToken`
+3. **Authorise in Swagger** â†’ Add `X-Session-Token` header (or Bearer)
+4. **Create Event** â†’ `POST /api/events`
+5. **Add Category** â†’ `POST /api/events/{id}/categories`
+6. **Register Participant** â†’ separate session
+7. **Enrol** â†’ `POST /api/events/{id}/enrolments` (Participant)
+8. **Capture Result** â†’ back as Organiser â†’ `POST /api/enrolments/{id}/result`
+9. **View Public Results** â†’ `GET /api/events/{id}/results` (no auth required)
 
 Ready-to-send requests are provided in [`src/RaceDay.Api/RaceDay.Api.http`](src/RaceDay.Api/RaceDay.Api.http).
 
@@ -209,18 +209,29 @@ All endpoints match [`docs/api-endpoint-plan.md`](docs/api-endpoint-plan.md) exa
 
 GitHub Actions workflows run on push, pull request and manual dispatch:
 
-- **[validate-structure.yml](.github/workflows/validate-structure.yml)** – Re-validates Part 1 artefacts: ERD, endpoint plan, SQL script, and minimum table count (≥6). Runs on Ubuntu.
-- **[ci-api.yml](.github/workflows/ci-api.yml)** – Builds and tests the API in Release configuration on Ubuntu with .NET 10. Also re-checks critical docs (ERD, endpoint plan, SQL script, table count). All 16 xUnit tests must pass.
+- **[validate-structure.yml](.github/workflows/validate-structure.yml)** â€“ Re-validates Part 1 artefacts: ERD, endpoint plan, SQL script, and minimum table count (â‰¥6). Runs on Ubuntu.
+- **[ci-api.yml](.github/workflows/ci-api.yml)** â€“ Builds and tests the API in Release configuration on Ubuntu with .NET 10. Also re-checks critical docs (ERD, endpoint plan, SQL script, table count). All 16 xUnit tests must pass.
 
 Both workflows are green on `main`.
 
 ---
 
-## 10. Part 3 – MVC Web Application (Planned)
+## 10. Part 3 â€“ MVC Web Application (Planned)
 
 Part 3 will extend RaceDay with an ASP.NET Core MVC web application in `src/RaceDay.Web`. The MVC layer will consume the same domain rules, enforce role-based UI (Organiser vs Participant), and provide forms/views for events, categories, enrolments and results. This README will be updated to include MVC setup/run instructions once implemented.
 
 ---
+## 11. References
+
+- Microsoft. (n.d.). *ASP.NET Core documentation*. https://learn.microsoft.com/en-us/aspnet/core/
+- Microsoft. (n.d.). *Entity Framework Core*. https://learn.microsoft.com/en-us/ef/core/
+- Microsoft. (n.d.). *SQL Server documentation*. https://learn.microsoft.com/en-us/sql/sql-server/
+- Medo, A. (n.d.). *BCrypt.Net-Next*. https://github.com/BcryptNet/bcrypt.net
+- Swashbuckle. (n.d.). *Swashbuckle.AspNetCore*. https://github.com/domaindrivendev/Swashbuckle.AspNetCore
+- xUnit.net. (n.d.). *xUnit.net*. https://xunit.net/
+- Microsoft. (n.d.). *dotnet-test*. https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test
+- Docker. (n.d.). *Docker documentation*. https://docs.docker.com/
 
 **Repository:** [https://github.com/ST10466873/PROG6212-POE](https://github.com/ST10466873/PROG6212-POE)  
-**Solution:** `RaceDay.slnx` (contains `RaceDay.Api` and `RaceDay.Tests`)
+**Repository:** [https://github.com/ST10466873/PROG6212-POE](https://github.com/ST10466873/PROG6212-POE)
+**Solution:** RaceDay.slnx (contains RaceDay.Api and RaceDay.Tests)
