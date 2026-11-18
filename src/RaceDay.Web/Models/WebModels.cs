@@ -2,6 +2,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RaceDay.Web.Models;
 
+public sealed class NotInFutureAttribute : ValidationAttribute
+{
+    public override bool IsValid(object? value) => value is not DateTime date || date <= DateTime.Today;
+}
+
+public sealed class FutureDateAttribute : ValidationAttribute
+{
+    public override bool IsValid(object? value) => value is not DateTime date || date > DateTime.Today;
+}
+
 // ============================================================
 // View models for the MVC layer. These mirror API JSON contracts only —
 // no entity classes, DbContext or domain rules live in this project.
@@ -28,19 +38,19 @@ public class RegisterViewModel
     [Required, MaxLength(50), Display(Name = "Last name")]
     public string LastName { get; set; } = "";
 
-    [Required, EmailAddress]
+    [Required, EmailAddress, MaxLength(100)]
     public string Email { get; set; } = "";
 
-    [Required, MinLength(6), DataType(DataType.Password)]
+    [Required, MinLength(6), MaxLength(100), DataType(DataType.Password)]
     public string Password { get; set; } = "";
 
-    [Required, DataType(DataType.Date), Display(Name = "Date of birth")]
+    [Required, DataType(DataType.Date), NotInFuture(ErrorMessage = "Date of birth cannot be in the future."), Display(Name = "Date of birth")]
     public DateTime DateOfBirth { get; set; } = new DateTime(1995, 1, 1);
 
-    [Display(Name = "Phone number")]
+    [Display(Name = "Phone number"), RegularExpression(@"^[0-9 +()-]{0,20}$", ErrorMessage = "Use digits, spaces, +, - or brackets only.")]
     public string? PhoneNumber { get; set; }
 
-    [Required]
+    [Required, RegularExpression("^(Participant|Organiser)$", ErrorMessage = "Choose Participant or Organiser.")]
     public string Role { get; set; } = "Participant";
 }
 
@@ -101,7 +111,7 @@ public class EventFormViewModel
     [Required, MaxLength(500)]
     public string Description { get; set; } = "";
 
-    [Required, DataType(DataType.Date), Display(Name = "Event date")]
+    [Required, DataType(DataType.Date), FutureDate(ErrorMessage = "Event date must be in the future."), Display(Name = "Event date")]
     public DateTime Date { get; set; } = DateTime.Today.AddDays(14);
 
     [Required, MaxLength(100)]
@@ -128,10 +138,10 @@ public class CategoryFormViewModel
     [Required, MaxLength(50), Display(Name = "Category name")]
     public string CategoryName { get; set; } = "";
 
-    [Display(Name = "Minimum age")]
+    [Display(Name = "Minimum age"), Range(0, 120, ErrorMessage = "Age must be between 0 and 120.")]
     public int? MinAge { get; set; }
 
-    [Display(Name = "Maximum age")]
+    [Display(Name = "Maximum age"), Range(0, 120, ErrorMessage = "Age must be between 0 and 120.")]
     public int? MaxAge { get; set; }
 }
 
@@ -144,7 +154,7 @@ public class ResultFormViewModel
     public string CategoryName { get; set; } = "";
     public int? ExistingResultId { get; set; }
 
-    [Required, Display(Name = "Finish time (HH:MM:SS.fff)")]
+    [Required, RegularExpression(@"^\d{2}:\d{2}:\d{2}\.\d{3}$", ErrorMessage = "Use HH:MM:SS.fff, for example 00:42:15.250."), Display(Name = "Finish time (HH:MM:SS.fff)")]
     public string FinishTime { get; set; } = "00:00:00.000";
 
     [Required, Range(1, int.MaxValue), Display(Name = "Finishing position")]
@@ -160,13 +170,13 @@ public class ProfileFormViewModel
     [Required, MaxLength(50), Display(Name = "Last name")]
     public string LastName { get; set; } = "";
 
-    [Required, EmailAddress]
+    [Required, EmailAddress, MaxLength(100)]
     public string Email { get; set; } = "";
 
-    [Display(Name = "Phone number")]
+    [Display(Name = "Phone number"), RegularExpression(@"^[0-9 +()-]{0,20}$", ErrorMessage = "Use digits, spaces, +, - or brackets only.")]
     public string? PhoneNumber { get; set; }
 
-    [Required, DataType(DataType.Date), Display(Name = "Date of birth")]
+    [Required, DataType(DataType.Date), NotInFuture(ErrorMessage = "Date of birth cannot be in the future."), Display(Name = "Date of birth")]
     public DateTime DateOfBirth { get; set; }
 
     [Display(Name = "Profile picture")]
