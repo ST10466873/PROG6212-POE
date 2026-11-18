@@ -207,7 +207,7 @@ The two new nullable columns are documented in [`docs/part3-schema-extension.sql
 
 ## 8. Continuous integration
 
-![CI green build](https://github.com/user-attachments/assets/7f213046-e9a3-4aee-ba94-13ca8927d30b)
+![CI green build](docs/images/ci-build-part3.png)
 
 GitHub Actions (`.github/workflows/ci-api.yml`) runs on every push and pull request:
 
@@ -217,7 +217,7 @@ GitHub Actions (`.github/workflows/ci-api.yml`) runs on every push and pull requ
 4. Publishes both applications to verify container-ready artefacts.
 5. Re-validates the Part 1 docs and the Part 3 MVC/Docker structure.
 
-`validate-structure.yml` separately checks the Part 1 deliverables. Both workflows show green checks on `main`. Capture a fresh screenshot after your final push and replace the image above if the badge/date differs.
+`validate-structure.yml` separately checks the Part 1 deliverables. Both workflows show green checks on `main`; the screenshot above is the CI run for the final Part 3 commit (`ccdbf9e`), completed successfully in 42 seconds.
 
 ---
 
