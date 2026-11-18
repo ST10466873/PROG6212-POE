@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\RaceDay.Api\RaceDay.Api.csproj" />
+    <ProjectReference Include="..\..\src\RaceDay.Web\RaceDay.Web.csproj" Aliases="RaceDayWeb" />
   </ItemGroup>
 
 </Project>
