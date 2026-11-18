@@ -67,7 +67,7 @@ Role enforcement exists at both layers: the API validates every session token an
 │   ├── Views/                         # Role-aware Razor views + shared layout
 │   ├── wwwroot/css/site.css           # RaceDay brand system
 │   └── wwwroot/img/                   # Event placeholder artwork
-└── tests/RaceDay.Tests/               # 23 xUnit tests (16 Part 2 + 7 Part 3)
+└── tests/RaceDay.Tests/               # 38 xUnit tests (16 Part 2 + 22 Part 3)
 ```
 
 ---
@@ -103,7 +103,7 @@ dotnet run --project src/RaceDay.Api
 - Session token header: `X-Session-Token: <token>` (Bearer is also accepted)
 - Passwords are BCrypt-hashed; server-side sessions expire after 24 hours
 
-Run all 23 tests:
+Run all 38 tests:
 
 ```bash
 dotnet test
@@ -213,7 +213,7 @@ GitHub Actions (`.github/workflows/ci-api.yml`) runs on every push and pull requ
 
 1. Sets up .NET 10 and restores the whole solution.
 2. Builds the API, MVC web app and tests in Release.
-3. Runs all 23 xUnit tests.
+3. Runs all 38 xUnit tests.
 4. Publishes both applications to verify container-ready artefacts.
 5. Re-validates the Part 1 docs and the Part 3 MVC/Docker structure.
 
@@ -221,7 +221,18 @@ GitHub Actions (`.github/workflows/ci-api.yml`) runs on every push and pull requ
 
 ---
 
-## 9. Video presentation
+## 9. Verification record
+
+| Check | Command | Result |
+|---|---|---|
+| Release build | `dotnet build RaceDay.slnx --configuration Release` | 0 warnings, 0 errors |
+| Full test suite | `dotnet test RaceDay.slnx --no-build --configuration Release` | 38 passed, 0 failed |
+| Part 3 commit history | `git log --oneline --grep='^Part 3'` | 20 meaningful Part 3 commits |
+| CI | Push to `main` | API + MVC build, publish and all tests green |
+
+The requirement-by-requirement mapping is in [`docs/part3-evidence.md`](docs/part3-evidence.md).
+
+## 10. Video presentation
 
 A requirement-by-requirement evidence checklist is in [`docs/part3-evidence.md`](docs/part3-evidence.md).
 
@@ -231,13 +242,13 @@ The video should demonstrate the running MVC application, explain the MVC struct
 
 ---
 
-## 10. AI tool disclosure
+## 11. AI tool disclosure
 
 An AI coding assistant was used to help draft and review parts of the Part 3 implementation and documentation. All code was reviewed, run and verified locally by the student (build, 23 passing tests and CI); no AI-generated voiceover was used.
 
 ---
 
-## 11. References
+## 12. References
 
 - Microsoft. (n.d.). *ASP.NET Core documentation*. https://learn.microsoft.com/aspnet/core/
 - Microsoft. (n.d.). *Entity Framework Core*. https://learn.microsoft.com/ef/core/

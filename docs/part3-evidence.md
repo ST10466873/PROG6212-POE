@@ -22,7 +22,7 @@ Use this checklist when recording the demo and when the marker opens the reposit
 | CI builds MVC and runs tests | `.github/workflows/ci-api.yml` | Show green checks on the pushed commit and the screenshot in README section 8 |
 | 20 meaningful commits for Part 3 | `git log --oneline --grep='^Part 3'` | Run the command and show the Part 3 commit list |
 | README with Docker run command | README section 6.2 | Show `docker compose up --build` and the single-web-image `docker run` command |
-| YouTube demo link | README section 9 | Replace `VIDEO_LINK_TODO` with the unlisted link before submission |
+| YouTube demo link | README section 10 | Replace `VIDEO_LINK_TODO` with the unlisted link before submission |
 
 ## Verification commands
 
