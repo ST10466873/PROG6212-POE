@@ -1,0 +1,23 @@
+# RaceDay RESTful API — multi-stage, non-root production image.
+# Built by docker compose via Dockerfile.api; the root Dockerfile builds the MVC app.
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+COPY RaceDay.slnx ./
+COPY src/RaceDay.Api/RaceDay.Api.csproj src/RaceDay.Api/
+RUN dotnet restore src/RaceDay.Api/RaceDay.Api.csproj
+
+COPY . ./
+RUN dotnet publish src/RaceDay.Api/RaceDay.Api.csproj -c Release -o /app/publish --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+WORKDIR /app
+RUN groupadd --system raceday && useradd --system --gid raceday raceday
+COPY --from=build /app/publish ./
+RUN chown -R raceday:raceday /app
+USER raceday
+
+EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_HTTP_PORTS=8080
+ENTRYPOINT ["dotnet", "RaceDay.Api.dll"]
