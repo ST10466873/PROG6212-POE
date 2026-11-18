@@ -1,4 +1,4 @@
-name: CI - Build and Test API
+name: CI - Build and Test RaceDay
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-test:
-    name: Build and test RaceDay API
+    name: Build API + MVC web app and run all tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -18,16 +18,24 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Restore
-        run: dotnet restore
+      - name: Restore solution (API, Web and Tests)
+        run: dotnet restore RaceDay.slnx
 
-      - name: Build
-        run: dotnet build --no-restore --configuration Release
+      - name: Build solution in Release
+        run: dotnet build RaceDay.slnx --no-restore --configuration Release
 
-      - name: Test
-        run: dotnet test --no-build --configuration Release --verbosity normal
+      - name: Run all xUnit tests
+        run: dotnet test RaceDay.slnx --no-build --configuration Release --verbosity normal
 
-      - name: Validate docs structure (re-run Part 1 checks)
+      - name: Publish MVC and API (container-ready artefacts)
+        run: |
+          set -e
+          dotnet publish src/RaceDay.Web/RaceDay.Web.csproj -c Release -o ./artifacts/web --no-restore
+          dotnet publish src/RaceDay.Api/RaceDay.Api.csproj -c Release -o ./artifacts/api --no-restore
+          test -f artifacts/web/RaceDay.Web.dll
+          test -f artifacts/api/RaceDay.Api.dll
+
+      - name: Validate Part 1 docs structure
         run: |
           set -e
           [ -f docs/RaceDay_ERD.png ] || { echo "::error::ERD missing"; exit 1; }
@@ -36,3 +44,26 @@ jobs:
           tables=$(grep -icE "^[[:space:]]*CREATE TABLE" docs/RaceDayDatabase.sql || true)
           [ "$tables" -ge 6 ] || { echo "::error::Only $tables tables"; exit 1; }
           echo "Docs OK ($tables tables)"
+
+      - name: Validate Part 3 MVC and Docker structure
+        run: |
+          set -euo pipefail
+          files=(
+            src/RaceDay.Web/RaceDay.Web.csproj
+            src/RaceDay.Web/Program.cs
+            src/RaceDay.Web/Services/ApiClient.cs
+            src/RaceDay.Web/Controllers/OrganiserController.cs
+            src/RaceDay.Web/Controllers/ParticipantController.cs
+            src/RaceDay.Web/Views/Shared/_Layout.cshtml
+            src/RaceDay.Web/wwwroot/css/site.css
+            Dockerfile
+            Dockerfile.api
+            docker-compose.yml
+            docs/part3-schema-extension.sql
+          )
+          for f in "${files[@]}"; do
+            [ -f "$f" ] || { echo "::error::$f is missing"; exit 1; }
+          done
+          views=$(find src/RaceDay.Web/Views -name '*.cshtml' | wc -l)
+          [ "$views" -ge 15 ] || { echo "::error::Only $views Razor views"; exit 1; }
+          echo "Part 3 structure OK ($views Razor views, API + MVC publish succeeded)"
