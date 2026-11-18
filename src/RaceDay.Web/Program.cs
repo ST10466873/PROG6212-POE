@@ -54,6 +54,7 @@ app.Use(async (context, next) =>
 });
 app.UseStaticFiles();
 app.UseRouting();
+app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
 app.UseSession();
 app.UseAuthorization();
 

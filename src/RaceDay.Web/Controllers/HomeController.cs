@@ -36,5 +36,9 @@ public class HomeController : WebControllerBase
     public IActionResult AccessDenied() => View();
 
     /// <summary>Friendly fallback for unexpected errors — no raw exception details are shown.</summary>
-    public IActionResult Error() => View();
+    public IActionResult Error(int? statusCode = null)
+    {
+        ViewData["StatusCode"] = statusCode;
+        return View();
+    }
 }
