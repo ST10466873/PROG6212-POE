@@ -21,3 +21,6 @@ obj/
 # Environment secrets (Parts 2 and 3)
 appsettings.Development.json
 .env
+
+# Local image storage (Part 3 development uploads)
+src/RaceDay.Api/uploads/

@@ -35,7 +35,7 @@ public class UploadsController : ControllerBase
     /// </summary>
     /// <returns>200 with the stored URL, or 400/401/403/404.</returns>
     [HttpPost("api/events/{id:int}/banner")]
-    public async Task<IActionResult> UploadBanner(int id, [FromForm] IFormFile? file)
+    public async Task<IActionResult> UploadBanner(int id, IFormFile? file)
     {
         var invalid = Validate(file);
         if (invalid != null) return invalid;
@@ -60,7 +60,7 @@ public class UploadsController : ControllerBase
     /// Accepted for both roles; the URL is returned through GET /api/users/me.
     /// </summary>
     [HttpPost("api/users/me/profile-picture")]
-    public async Task<IActionResult> UploadProfilePicture([FromForm] IFormFile? file)
+    public async Task<IActionResult> UploadProfilePicture(IFormFile? file)
     {
         var invalid = Validate(file);
         if (invalid != null) return invalid;
