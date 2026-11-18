@@ -16,7 +16,8 @@
     <link href="~/css/site.css" rel="stylesheet" />
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top raceday-nav">
+    <a class="visually-hidden-focusable" href="#mainContent">Skip to content</a>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top raceday-nav" aria-label="Main navigation">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index">
                 <span class="brand-mark">R</span><span>Race<span class="brand-accent">Day</span></span>
@@ -64,17 +65,17 @@
         </div>
     </nav>
 
-    <main class="container py-4 page-content">
+    <main id="mainContent" class="container py-4 page-content">
         @if (TempData["Error"] != null)
         {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" aria-live="assertive">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["Error"]
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         }
         @if (TempData["Success"] != null)
         {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" aria-live="polite">
                 <i class="bi bi-check-circle-fill me-2"></i>@TempData["Success"]
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>

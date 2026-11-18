@@ -14,26 +14,26 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label asp-for="FirstName" class="form-label fw-semibold"></label>
-                        <input asp-for="FirstName" class="form-control" />
+                        <input asp-for="FirstName" class="form-control" autocomplete="given-name" />
                         <span asp-validation-for="FirstName" class="text-danger small"></span>
                     </div>
                     <div class="col-md-6">
                         <label asp-for="LastName" class="form-label fw-semibold"></label>
-                        <input asp-for="LastName" class="form-control" />
+                        <input asp-for="LastName" class="form-control" autocomplete="family-name" />
                         <span asp-validation-for="LastName" class="text-danger small"></span>
                     </div>
                     <div class="col-md-6">
                         <label asp-for="Email" class="form-label fw-semibold"></label>
-                        <input asp-for="Email" class="form-control" />
+                        <input asp-for="Email" class="form-control" autocomplete="email" />
                         <span asp-validation-for="Email" class="text-danger small"></span>
                     </div>
                     <div class="col-md-6">
                         <label asp-for="PhoneNumber" class="form-label fw-semibold"></label>
-                        <input asp-for="PhoneNumber" class="form-control" placeholder="082 000 0000" />
+                        <input asp-for="PhoneNumber" class="form-control" placeholder="082 000 0000" autocomplete="tel" />
                     </div>
                     <div class="col-md-4">
                         <label asp-for="DateOfBirth" class="form-label fw-semibold"></label>
-                        <input asp-for="DateOfBirth" class="form-control" />
+                        <input asp-for="DateOfBirth" class="form-control" autocomplete="bday" />
                         <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
                     </div>
                     <div class="col-md-4">
@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-md-4">
                         <label asp-for="Password" class="form-label fw-semibold"></label>
-                        <input asp-for="Password" class="form-control" />
+                        <input asp-for="Password" class="form-control" autocomplete="new-password" />
                         <span asp-validation-for="Password" class="text-danger small"></span>
                     </div>
                 </div>

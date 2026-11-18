@@ -13,12 +13,12 @@
                 <input type="hidden" asp-for="ReturnUrl" />
                 <div class="mb-3">
                     <label asp-for="Email" class="form-label fw-semibold"></label>
-                    <input asp-for="Email" class="form-control" placeholder="you@example.com" />
+                    <input asp-for="Email" class="form-control" placeholder="you@example.com" autocomplete="username" />
                     <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
                 <div class="mb-4">
                     <label asp-for="Password" class="form-label fw-semibold"></label>
-                    <input asp-for="Password" class="form-control" placeholder="Your password" />
+                    <input asp-for="Password" class="form-control" placeholder="Your password" autocomplete="current-password" />
                     <span asp-validation-for="Password" class="text-danger small"></span>
                 </div>
                 <button type="submit" class="btn btn-accent w-100">Log in</button>
