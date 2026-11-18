@@ -47,6 +47,8 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 
+app.MapGet("/health", () => Results.Ok(new { status = "healthy", service = "raceday-web" }));
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
