@@ -223,6 +223,8 @@ GitHub Actions (`.github/workflows/ci-api.yml`) runs on every push and pull requ
 
 ## 9. Video presentation
 
+A requirement-by-requirement evidence checklist is in [`docs/part3-evidence.md`](docs/part3-evidence.md).
+
 **Submit an unlisted YouTube link here before the deadline:** `VIDEO_LINK_TODO`
 
 The video should demonstrate the running MVC application, explain the MVC structure, show both role interfaces, walk through the Azure Blob Storage flow through the API, and explain the Docker setup. A voiceover recorded in your own voice is required; AI-generated voices are not permitted.
