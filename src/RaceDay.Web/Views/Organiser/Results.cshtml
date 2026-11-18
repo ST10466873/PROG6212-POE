@@ -1,0 +1,96 @@
+@model List<ResultFormViewModel>
+@{
+    var ev = ViewBag.Event as EventVm;
+    var published = ViewBag.Published as List<ResultVm> ?? new List<ResultVm>();
+    ViewData["Title"] = "Results · " + (ev?.EventName ?? "Event");
+}
+<div class="mb-3">
+    <p class="section-kicker">@ev?.EventName</p>
+    <h1 class="h2 section-title mb-0">Capture &amp; publish results</h1>
+    <p class="text-muted small">Enter a finish time (HH:MM:SS.fff) and a unique finishing position. Positions can be corrected later.</p>
+</div>
+
+<div class="card p-4">
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="bi bi-stopwatch"></i>
+            <h3 class="h5 mt-3">No enrolled participants</h3>
+            <p>Results can only be captured for participants who have entered the event.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr><th>Participant</th><th>Category</th><th>Finish time</th><th>Position</th><th class="text-end">Action</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model)
+                    {
+                        <tr>
+                            <td><strong>@row.ParticipantName</strong></td>
+                            <td><span class="badge bg-light text-navy">@row.CategoryName</span></td>
+                            <td colspan="2">
+                                <form asp-controller="Organiser" asp-action="SaveResult" method="post" class="row g-2 align-items-center">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="EventId" value="@row.EventId" />
+                                    <input type="hidden" name="EnrolmentId" value="@row.EnrolmentId" />
+                                    <input type="hidden" name="ExistingResultId" value="@row.ExistingResultId" />
+                                    <input type="hidden" name="ParticipantName" value="@row.ParticipantName" />
+                                    <input type="hidden" name="CategoryName" value="@row.CategoryName" />
+                                    <div class="col-auto">
+                                        <input class="form-control form-control-sm" name="FinishTime" value="@row.FinishTime"
+                                               placeholder="00:35:12.500" required />
+                                    </div>
+                                    <div class="col-auto">
+                                        <input class="form-control form-control-sm" name="Position" type="number" min="1"
+                                               value="@row.Position" required />
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-sm @(row.ExistingResultId.HasValue ? "btn-outline-primary" : "btn-accent")">
+                                            @(row.ExistingResultId.HasValue ? "Correct" : "Publish")
+                                        </button>
+                                    </div>
+                                </form>
+                            </td>
+                            <td class="text-end">
+                                @if (row.ExistingResultId.HasValue)
+                                {
+                                    <span class="status status-complete">Published</span>
+                                }
+                                else
+                                {
+                                    <span class="status status-pending">Pending</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@if (published.Any())
+{
+    <div class="card p-4 mt-4">
+        <h2 class="h5 section-title mb-3">Published leaderboard (@published.Count)</h2>
+        <div class="table-responsive">
+            <table class="table table-sm align-middle">
+                <thead><tr><th>Position</th><th>Participant</th><th>Finish time</th></tr></thead>
+                <tbody>
+                    @foreach (var r in published.OrderBy(r => r.FinishingPosition))
+                    {
+                        <tr class="@(r.FinishingPosition <= 3 ? $"podium-{r.FinishingPosition}" : "")">
+                            <td class="podium">@ImageUrlHelper.Position(r.FinishingPosition)</td>
+                            <td>@r.ParticipantName</td>
+                            <td>@r.FinishTime</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

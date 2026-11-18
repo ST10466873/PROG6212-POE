@@ -48,7 +48,8 @@ public class ParticipantController : WebControllerBase
             LastName = p.LastName,
             Email = p.Email,
             PhoneNumber = p.PhoneNumber,
-            DateOfBirth = p.DateOfBirth
+            DateOfBirth = p.DateOfBirth,
+            ProfilePictureUrl = p.ProfilePictureUrl
         });
     }
 

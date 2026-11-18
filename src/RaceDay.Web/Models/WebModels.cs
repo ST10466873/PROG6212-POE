@@ -171,4 +171,6 @@ public class ProfileFormViewModel
 
     [Display(Name = "Profile picture")]
     public IFormFile? Picture { get; set; }
+
+    public string? ProfilePictureUrl { get; set; }
 }

@@ -1,0 +1,53 @@
+@model List<EventSummaryVm>
+@{
+    ViewData["Title"] = "Manage events";
+}
+<div class="d-flex justify-content-between align-items-end mb-3">
+    <div>
+        <p class="section-kicker">Event management</p>
+        <h1 class="h2 section-title mb-0">Your events</h1>
+    </div>
+    <a class="btn btn-accent" asp-controller="Organiser" asp-action="Create"><i class="bi bi-plus-circle me-1"></i>New event</a>
+</div>
+
+<div class="card p-4">
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="bi bi-flag"></i>
+            <h3 class="h5 mt-3">Nothing on the calendar</h3>
+            <p>Set up an event, add categories and open entries.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead><tr><th>Event</th><th>Date</th><th>Location</th><th>Entries</th><th class="text-end">Actions</th></tr></thead>
+                <tbody>
+                    @foreach (var e in Model)
+                    {
+                        <tr>
+                            <td><strong>@e.EventName</strong><br /><span class="event-type @e.EventType">@e.EventType</span></td>
+                            <td>@ImageUrlHelper.RaceDate(e.EventDate)</td>
+                            <td>@e.Location</td>
+                            <td><span class="badge bg-primary">@e.EnrolmentCount</span></td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-secondary" asp-controller="Organiser" asp-action="Edit" asp-route-id="@e.EventId">Edit</a>
+                                <a class="btn btn-sm btn-outline-primary" asp-controller="Organiser" asp-action="Categories" asp-route-eventId="@e.EventId">Categories</a>
+                                <a class="btn btn-sm btn-outline-primary" asp-controller="Organiser" asp-action="Enrolments" asp-route-eventId="@e.EventId">Entries</a>
+                                <a class="btn btn-sm btn-outline-dark" asp-controller="Organiser" asp-action="Results" asp-route-eventId="@e.EventId">Results</a>
+                                <form asp-controller="Organiser" asp-action="Delete" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@e.EventId" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Delete @e.EventName and all its entries?')">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

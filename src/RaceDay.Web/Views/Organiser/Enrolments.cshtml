@@ -1,0 +1,60 @@
+@model List<EnrolmentVm>
+@{
+    var ev = ViewBag.Event as EventVm;
+    var results = ViewBag.Results as List<ResultVm> ?? new List<ResultVm>();
+    ViewData["Title"] = "Enrolments · " + (ev?.EventName ?? "Event");
+}
+<div class="d-flex justify-content-between align-items-end mb-3">
+    <div>
+        <p class="section-kicker">@ev?.EventName</p>
+        <h1 class="h2 section-title mb-0">Participant enrolments</h1>
+        <p class="text-muted small mb-0">@Model.Count entrant@(Model.Count == 1 ? "" : "s") for this event.</p>
+    </div>
+    <a class="btn btn-race" asp-controller="Organiser" asp-action="Results" asp-route-eventId="@ev?.EventId">Capture results</a>
+</div>
+
+<div class="card p-4">
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="bi bi-people"></i>
+            <h3 class="h5 mt-3">No enrolments yet</h3>
+            <p>Participants will appear here as soon as they enter the event.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead><tr><th>Participant</th><th>Category</th><th>Enrolled</th><th>Status</th><th>Result</th></tr></thead>
+                <tbody>
+                    @foreach (var e in Model)
+                    {
+                        var result = results.FirstOrDefault(r => r.EnrolmentId == e.EnrolmentId);
+                        <tr>
+                            <td><strong>@e.ParticipantName</strong></td>
+                            <td>@e.CategoryName</td>
+                            <td>@e.EnrolmentDate.ToString("d MMM yyyy")</td>
+                            <td>
+                                <span class="status @(e.Status?.ToLowerInvariant() switch {
+                                    "confirmed" => "status-confirmed",
+                                    "pending" => "status-pending",
+                                    _ => "status-cancelled" })">@e.Status</span>
+                            </td>
+                            <td>
+                                @if (result == null)
+                                {
+                                    <span class="status status-pending">Not captured</span>
+                                }
+                                else
+                                {
+                                    <span class="status status-complete">@result.FinishTime · @ImageUrlHelper.Position(result.FinishingPosition)</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" role="img" aria-label="RaceDay event">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1f3a"/>
+      <stop offset="0.65" stop-color="#1d4b80"/>
+      <stop offset="1" stop-color="#ff5a1f"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="300" fill="url(#g)"/>
+  <circle cx="540" cy="58" r="46" fill="#c8f135" opacity="0.35"/>
+  <path d="M0 230 Q160 170 320 225 T640 210 L640 300 L0 300 Z" fill="#0b1f3a" opacity="0.55"/>
+  <g fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.9">
+    <path d="M70 170 h44 l16 -26 18 46 18 -34 16 14 h52"/>
+    <circle cx="68" cy="170" r="10" fill="#ff5a1f"/>
+  </g>
+  <text x="42" y="272" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" opacity="0.9">RACE DAY</text>
+</svg>

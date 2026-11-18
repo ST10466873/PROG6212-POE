@@ -1,0 +1,58 @@
+@model List<MyResultVm>
+@{
+    ViewData["Title"] = "My results";
+}
+<div class="mb-3">
+    <p class="section-kicker">Personal performance history</p>
+    <h1 class="h2 section-title mb-0">My results</h1>
+    <p class="text-muted small">Finish times and positions are captured by the Organiser after each event.</p>
+</div>
+
+<div class="card p-4">
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="bi bi-stopwatch"></i>
+            <h3 class="h5 mt-3">No results yet</h3>
+            <p>Once an event is complete and the Organiser publishes results, they will appear here.</p>
+            <a class="btn btn-race" asp-controller="Participant" asp-action="MyEvents">See my entries</a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-3">
+            @foreach (var r in Model)
+            {
+                <div class="col-md-6 col-xl-4">
+                    <div class="card h-100 border-start border-4 border-accent" style="border-left-color:var(--rd-orange)">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="section-kicker mb-0">@ImageUrlHelper.RaceDate(r.EventDate)</p>
+                                    <h3 class="h5 section-title mb-1">@r.EventName</h3>
+                                    <span class="badge bg-light text-navy">@r.CategoryName</span>
+                                </div>
+                                <span class="display-6 text-navy"><i class="bi bi-trophy"></i></span>
+                            </div>
+                            <hr />
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <span class="field-hint">Finish time</span>
+                                    <div class="h4 mb-0 fw-bold text-navy">@r.FinishTime</div>
+                                </div>
+                                <div class="text-end">
+                                    <span class="field-hint">Position</span>
+                                    <div class="h4 mb-0 fw-bold text-navy">@ImageUrlHelper.Position(r.FinishingPosition)</div>
+                                </div>
+                            </div>
+                            <p class="small text-muted mt-3 mb-0">
+                                <i class="bi bi-people me-1"></i>
+                                @ImageUrlHelper.Position(r.FinishingPosition) out of @r.TotalFinishers finishers
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

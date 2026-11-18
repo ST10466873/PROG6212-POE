@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/RaceDay.Api/RaceDay.Api.csproj" />
+    <Project Path="src/RaceDay.Web/RaceDay.Web.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/RaceDay.Tests/RaceDay.Tests.csproj" />

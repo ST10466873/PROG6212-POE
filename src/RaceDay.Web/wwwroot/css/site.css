@@ -1,0 +1,123 @@
+/* RaceDay brand system — used on every page for a consistent sporting identity. */
+:root {
+    --rd-navy: #0b1f3a;
+    --rd-navy-soft: #16345c;
+    --rd-orange: #ff5a1f;
+    --rd-lime: #c8f135;
+    --rd-ink: #17202a;
+    --rd-muted: #697586;
+    --rd-surface: #f4f6f9;
+    --rd-radius: 14px;
+}
+
+body {
+    color: var(--rd-ink);
+    background: var(--rd-surface);
+    font-family: "Segoe UI", Inter, system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+}
+
+.raceday-nav {
+    background: linear-gradient(100deg, var(--rd-navy) 0%, var(--rd-navy-soft) 100%);
+    box-shadow: 0 4px 18px rgba(11, 31, 58, .22);
+}
+
+.raceday-nav .nav-link { color: rgba(255,255,255,.82); font-weight: 600; }
+.raceday-nav .nav-link:hover, .raceday-nav .nav-link.active { color: var(--rd-lime); }
+
+.brand-mark {
+    display: inline-grid;
+    place-items: center;
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    background: var(--rd-orange);
+    color: #fff;
+    font-weight: 800;
+    transform: skew(-8deg);
+}
+
+.brand-accent { color: var(--rd-lime); }
+.role-badge { background: var(--rd-lime); color: var(--rd-navy); font-weight: 700; }
+.btn-accent { background: var(--rd-orange); border-color: var(--rd-orange); color: #fff; font-weight: 700; }
+.btn-accent:hover { background: #e64d16; border-color: #e64d16; color: #fff; }
+.btn-race { background: var(--rd-navy); border-color: var(--rd-navy); color: #fff; font-weight: 700; }
+.btn-race:hover { background: var(--rd-navy-soft); border-color: var(--rd-navy-soft); color: #fff; }
+
+.page-content { padding-top: 5.5rem; min-height: calc(100vh - 90px); }
+
+.hero {
+    border-radius: 22px;
+    padding: 3.2rem 2rem;
+    color: #fff;
+    background:
+        radial-gradient(circle at 88% 18%, rgba(200,241,53,.35), transparent 32%),
+        linear-gradient(120deg, var(--rd-navy) 0%, #1d4b80 62%, var(--rd-orange) 140%);
+    box-shadow: 0 18px 42px rgba(11,31,58,.2);
+}
+
+.hero h1 { font-weight: 800; letter-spacing: -.02em; }
+.hero .lead { color: rgba(255,255,255,.85); }
+
+.card {
+    border: 0;
+    border-radius: var(--rd-radius);
+    box-shadow: 0 6px 20px rgba(23,32,42,.07);
+}
+
+.card-event { overflow: hidden; transition: transform .18s ease, box-shadow .18s ease; }
+.card-event:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(11,31,58,.16); }
+.card-event img.event-banner { height: 150px; object-fit: cover; width: 100%; }
+
+.event-type {
+    display: inline-block;
+    padding: .25rem .65rem;
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--rd-navy);
+}
+.event-type.Run { background: #e64d16; }
+.event-type.Walk { background: #2f855a; }
+.event-type.Cycle { background: #2b6cb0; }
+
+.stat-card { border-left: 5px solid var(--rd-orange); }
+.stat-card .stat-value { font-size: 2rem; font-weight: 800; color: var(--rd-navy); }
+.stat-card .stat-label { color: var(--rd-muted); text-transform: uppercase; font-size: .72rem; font-weight: 700; letter-spacing: .08em; }
+
+.status {
+    display: inline-block;
+    padding: .3rem .7rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: .78rem;
+}
+.status-confirmed { background: #d6f5e3; color: #17643c; }
+.status-pending { background: #fff0cc; color: #8a5a00; }
+.status-cancelled, .status-declined { background: #ffe0e0; color: #9b1c1c; }
+.status-complete { background: #e5e9ff; color: #304a9b; }
+
+.section-title { font-weight: 800; color: var(--rd-navy); }
+.section-kicker { color: var(--rd-orange); font-weight: 800; text-transform: uppercase; letter-spacing: .1em; font-size: .75rem; }
+
+.table thead th { color: var(--rd-muted); font-size: .76rem; text-transform: uppercase; letter-spacing: .06em; }
+
+.podium { font-weight: 800; color: var(--rd-navy); }
+.podium-1 { background: #fff3bf; }
+.podium-2 { background: #e9ecef; }
+.podium-3 { background: #f7dfc4; }
+
+.profile-picture {
+    width: 110px; height: 110px; border-radius: 50%;
+    object-fit: cover; border: 4px solid #fff;
+    box-shadow: 0 6px 18px rgba(11,31,58,.2);
+}
+
+.raceday-footer { background: var(--rd-navy); color: rgba(255,255,255,.9); }
+.empty-state { padding: 3rem 1rem; text-align: center; color: var(--rd-muted); }
+.empty-state i { font-size: 2.5rem; color: var(--rd-orange); }
+
+.field-hint { font-size: .8rem; color: var(--rd-muted); }
+.text-navy { color: var(--rd-navy); }

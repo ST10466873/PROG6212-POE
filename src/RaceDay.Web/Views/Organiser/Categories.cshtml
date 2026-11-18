@@ -1,0 +1,86 @@
+@model List<CategoryVm>
+@{
+    var ev = ViewBag.Event as EventVm;
+    ViewData["Title"] = "Categories · " + (ev?.EventName ?? "Event");
+}
+<div class="mb-3">
+    <p class="section-kicker">@ev?.EventName</p>
+    <h1 class="h2 section-title mb-0">Category management</h1>
+    <p class="text-muted small">Define age bands (Under 20, Senior) or distance categories (10km, 21km) for this event.</p>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card p-4">
+            <h2 class="h5 section-title mb-3">Add a category</h2>
+            <form asp-controller="Organiser" asp-action="SaveCategory" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="EventId" value="@ev?.EventId" />
+                <input type="hidden" name="CategoryId" value="0" />
+                <div class="mb-3">
+                    <label class="form-label fw-semibold" for="newName">Category name</label>
+                    <input class="form-control" id="newName" name="CategoryName" required maxlength="50" placeholder="e.g. Senior 10km" />
+                </div>
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <label class="form-label small fw-semibold" for="newMin">Min age</label>
+                        <input class="form-control" id="newMin" name="MinAge" type="number" min="0" />
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small fw-semibold" for="newMax">Max age</label>
+                        <input class="form-control" id="newMax" name="MaxAge" type="number" min="0" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-accent w-100"><i class="bi bi-plus-circle me-1"></i>Add category</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <h2 class="h5 section-title mb-3">Published categories (@Model.Count)</h2>
+            @if (!Model.Any())
+            {
+                <p class="text-muted">No categories yet. Add at least one so participants can enter.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead><tr><th>Name</th><th>Age range</th><th class="text-end">Actions</th></tr></thead>
+                        <tbody>
+                            @foreach (var c in Model)
+                            {
+                                <tr>
+                                    <td><strong>@c.CategoryName</strong></td>
+                                    <td>@(c.MinAge.HasValue || c.MaxAge.HasValue ? $"{c.MinAge?.ToString() ?? "0"} – {c.MaxAge?.ToString() ?? "open"}" : "Open")</td>
+                                    <td class="text-end">
+                                        <button class="btn btn-sm btn-outline-secondary" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#cat-@c.CategoryId">Edit</button>
+                                        <form asp-controller="Organiser" asp-action="DeleteCategory" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="categoryId" value="@c.CategoryId" />
+                                            <input type="hidden" name="eventId" value="@ev?.EventId" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                    onclick="return confirm('Remove @c.CategoryName?')">Delete</button>
+                                        </form>
+                                        <div class="collapse mt-2" id="cat-@c.CategoryId">
+                                            <form asp-controller="Organiser" asp-action="SaveCategory" method="post" class="row g-2 align-items-end">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="EventId" value="@ev?.EventId" />
+                                                <input type="hidden" name="CategoryId" value="@c.CategoryId" />
+                                                <div class="col-5"><input class="form-control form-control-sm" name="CategoryName" value="@c.CategoryName" required /></div>
+                                                <div class="col-2"><input class="form-control form-control-sm" name="MinAge" type="number" min="0" value="@c.MinAge" /></div>
+                                                <div class="col-2"><input class="form-control form-control-sm" name="MaxAge" type="number" min="0" value="@c.MaxAge" /></div>
+                                                <div class="col-3"><button class="btn btn-sm btn-race w-100" type="submit">Save</button></div>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

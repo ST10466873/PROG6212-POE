@@ -1,0 +1,78 @@
+@model DashboardVm
+@{
+    ViewData["Title"] = "Organiser dashboard";
+}
+<div class="d-flex justify-content-between align-items-end mb-3">
+    <div>
+        <p class="section-kicker">Organiser command centre</p>
+        <h1 class="h2 section-title mb-0">Race day dashboard</h1>
+    </div>
+    <a class="btn btn-accent" asp-controller="Organiser" asp-action="Create"><i class="bi bi-plus-circle me-1"></i>New event</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6 col-xl-3">
+        <div class="card stat-card p-3"><div class="stat-value">@Model.TotalEvents</div><div class="stat-label">Events created</div></div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card stat-card p-3"><div class="stat-value">@Model.TotalEnrolments</div><div class="stat-label">Total enrolments</div></div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card stat-card p-3"><div class="stat-value">@Model.UpcomingEvents</div><div class="stat-label">Upcoming events</div></div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card stat-card p-3"><div class="stat-value">@Model.ResultsCaptured</div><div class="stat-label">Results captured</div></div>
+    </div>
+</div>
+
+<div class="card p-4">
+    <h2 class="h4 section-title mb-3">Your events</h2>
+    @if (!Model.Events.Any())
+    {
+        <div class="empty-state">
+            <i class="bi bi-calendar-plus"></i>
+            <h3 class="h5 mt-3">No events yet</h3>
+            <p>Create your first race and start accepting entries.</p>
+            <a class="btn btn-accent" asp-controller="Organiser" asp-action="Create">Create an event</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr><th>Event</th><th>Date</th><th>Location</th><th>Enrolments</th><th>Results</th><th class="text-end">Manage</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var e in Model.Events)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@e.EventName</strong>
+                                <span class="event-type @e.EventType ms-2">@e.EventType</span>
+                                @if (e.IsUpcoming)
+                                {
+                                    <span class="status status-confirmed ms-1">Upcoming</span>
+                                }
+                                else
+                                {
+                                    <span class="status status-complete ms-1">Completed</span>
+                                }
+                            </td>
+                            <td>@ImageUrlHelper.RaceDate(e.EventDate)</td>
+                            <td>@e.Location</td>
+                            <td><span class="badge bg-primary">@e.EnrolmentCount</span></td>
+                            <td><span class="badge bg-secondary">@e.ResultCount</span></td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-primary" asp-controller="Organiser" asp-action="Categories" asp-route-eventId="@e.EventId">Categories</a>
+                                <a class="btn btn-sm btn-outline-primary" asp-controller="Organiser" asp-action="Enrolments" asp-route-eventId="@e.EventId">Enrolments</a>
+                                <a class="btn btn-sm btn-outline-dark" asp-controller="Organiser" asp-action="Results" asp-route-eventId="@e.EventId">Results</a>
+                                <a class="btn btn-sm btn-outline-secondary" asp-controller="Organiser" asp-action="Edit" asp-route-id="@e.EventId">Edit</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

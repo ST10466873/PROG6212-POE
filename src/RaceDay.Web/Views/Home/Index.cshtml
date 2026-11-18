@@ -1,0 +1,85 @@
+@model List<EventVm>
+@{
+    ViewData["Title"] = "Upcoming events";
+    var selectedType = ViewBag.EventType as string ?? "";
+    var selectedLocation = ViewBag.Location as string ?? "";
+}
+<div class="hero mb-4">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <p class="section-kicker mb-2" style="color:var(--rd-lime)">South African road events</p>
+            <h1 class="display-5">Find your next race day.</h1>
+            <p class="lead mb-3">From park runs and charity walks to half marathons and cycle tours — browse, enter and track every finish.</p>
+        </div>
+        <div class="col-lg-4 d-none d-lg-block text-end">
+            <i class="bi bi-flag-fill" style="font-size:8rem;color:rgba(255,255,255,.14)"></i>
+        </div>
+    </div>
+</div>
+
+<div class="card p-3 mb-4">
+    <form asp-controller="Home" asp-action="Index" method="get" class="row g-2 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label small fw-bold" for="eventType">Event type</label>
+            <select class="form-select" id="eventType" name="eventType">
+                <option value="">All types</option>
+                @foreach (var type in new[] { "Run", "Walk", "Cycle" })
+                {
+                    <option value="@type" selected="@(selectedType == type)">@type</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label small fw-bold" for="location">Location</label>
+            <input class="form-control" id="location" name="location" value="@selectedLocation" placeholder="e.g. Cape Town, Durban, Johannesburg" />
+        </div>
+        <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-race"><i class="bi bi-funnel me-1"></i>Filter</button>
+        </div>
+    </form>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <p class="section-kicker mb-0">Race calendar</p>
+        <h2 class="h4 section-title mb-0">@Model.Count upcoming event@(Model.Count == 1 ? "" : "s")</h2>
+    </div>
+    @if (ViewBag.IsParticipant == true)
+    {
+        <a class="btn btn-outline-secondary btn-sm" asp-controller="Participant" asp-action="MyEvents">My entries</a>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="card empty-state">
+        <i class="bi bi-calendar-x"></i>
+        <h3 class="h5 mt-3">No events match those filters</h3>
+        <p>Try a different event type or location.</p>
+        <a class="btn btn-race" asp-controller="Home" asp-action="Index">Show all events</a>
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        @foreach (var ev in Model)
+        {
+            <div class="col">
+                <div class="card card-event h-100">
+                    <img class="event-banner" src="@ImageUrlHelper.Resolve(ev.BannerImageUrl)" alt="@ev.EventName banner" />
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="event-type @ev.EventType">@ev.EventType</span>
+                            <span class="small text-muted">@ev.DistanceKm km</span>
+                        </div>
+                        <h3 class="h5 card-title section-title">@ev.EventName</h3>
+                        <p class="card-text text-muted small flex-grow-1">@ev.Description</p>
+                        <p class="small mb-2"><i class="bi bi-calendar-event me-1"></i>@ImageUrlHelper.RaceDate(ev.EventDate)</p>
+                        <p class="small mb-3"><i class="bi bi-geo-alt me-1"></i>@ev.Location</p>
+                        <a class="btn btn-race mt-auto" asp-controller="Events" asp-action="Details" asp-route-id="@ev.EventId">View event</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

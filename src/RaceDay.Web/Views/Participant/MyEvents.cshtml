@@ -1,0 +1,60 @@
+@model List<EnrolmentVm>
+@{
+    ViewData["Title"] = "My events";
+}
+<div class="d-flex justify-content-between align-items-end mb-3">
+    <div>
+        <p class="section-kicker">Your race calendar</p>
+        <h1 class="h2 section-title mb-0">My events</h1>
+    </div>
+    <a class="btn btn-race" asp-controller="Home" asp-action="Index">Find another event</a>
+</div>
+
+<div class="card p-4">
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="bi bi-person-plus"></i>
+            <h3 class="h5 mt-3">You have not entered an event yet</h3>
+            <p>Browse upcoming events and pick your category to get started.</p>
+            <a class="btn btn-accent" asp-controller="Home" asp-action="Index">Browse events</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr><th>Event</th><th>Category</th><th>Enrolled</th><th>Status</th><th class="text-end">Actions</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var e in Model)
+                    {
+                        <tr>
+                            <td><strong>@e.EventName</strong></td>
+                            <td>@e.CategoryName</td>
+                            <td>@e.EnrolmentDate.ToString("d MMM yyyy")</td>
+                            <td>
+                                <span class="status @(e.Status?.ToLowerInvariant() switch {
+                                    "confirmed" => "status-confirmed",
+                                    "pending" => "status-pending",
+                                    _ => "status-cancelled" })">
+                                    @e.Status
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-secondary" asp-controller="Events" asp-action="Details" asp-route-id="@e.EventId">Details</a>
+                                <form asp-controller="Events" asp-action="Cancel" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="enrolmentId" value="@e.EnrolmentId" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Cancel this enrolment?')">Cancel</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

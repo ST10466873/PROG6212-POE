@@ -1,0 +1,69 @@
+@model ProfileFormViewModel
+@{
+    ViewData["Title"] = "My profile";
+}
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card p-4 text-center">
+            <p class="section-kicker">RaceDay member</p>
+            <h2 class="h4 section-title">Your profile</h2>
+            <div class="my-4">
+                @if (!string.IsNullOrWhiteSpace(Model.ProfilePictureUrl))
+                {
+                    <img class="profile-picture" src="@ImageUrlHelper.Resolve(Model.ProfilePictureUrl)" alt="Profile picture" />
+                }
+                else
+                {
+                    <div class="profile-picture d-grid place-items-center bg-navy text-white mx-auto" style="background:var(--rd-navy)">
+                        <i class="bi bi-person-circle" style="font-size:3rem"></i>
+                    </div>
+                }
+            </div>
+            <p class="field-hint">Upload a profile picture with the form. Files are stored by the API in Azure Blob Storage.</p>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <h2 class="h4 section-title mb-3">Personal information</h2>
+            <div asp-validation-summary="All" class="text-danger small mb-3"></div>
+            <form asp-controller="Participant" asp-action="Profile" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="ProfilePictureUrl" />
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="FirstName" class="form-label fw-semibold"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="LastName" class="form-label fw-semibold"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label fw-semibold"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="PhoneNumber" class="form-label fw-semibold"></label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="DateOfBirth" class="form-label fw-semibold"></label>
+                        <input asp-for="DateOfBirth" class="form-control" />
+                        <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Picture" class="form-label fw-semibold"></label>
+                        <input asp-for="Picture" class="form-control" type="file" accept="image/jpeg,image/png,image/webp,image/gif" />
+                        <span class="field-hint">JPG, PNG, WEBP or GIF · max 5 MB</span>
+                    </div>
+                </div>
+                <div class="d-grid d-md-flex justify-content-md-end mt-4">
+                    <button type="submit" class="btn btn-accent px-4">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

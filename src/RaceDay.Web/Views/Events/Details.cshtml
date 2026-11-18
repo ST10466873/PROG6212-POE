@@ -1,0 +1,110 @@
+@model EventVm
+@{
+    ViewData["Title"] = Model?.EventName ?? "Event";
+    var categories = ViewBag.Categories as List<CategoryVm> ?? new List<CategoryVm>();
+    var results = ViewBag.Results as List<ResultVm> ?? new List<ResultVm>();
+    var isParticipant = ViewBag.IsParticipant == true;
+    var enrolled = ViewBag.Enrolled == true;
+}
+<div class="card overflow-hidden mb-4">
+    <img src="@ImageUrlHelper.Resolve(Model?.BannerImageUrl)" class="event-banner w-100" style="height:260px;object-fit:cover" alt="@Model?.EventName banner" />
+    <div class="card-body p-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+            <div>
+                <span class="event-type @Model?.EventType">@Model?.EventType</span>
+                <h1 class="section-title mt-2 mb-1">@Model?.EventName</h1>
+                <p class="text-muted mb-0">Organised by @Model?.OrganiserName</p>
+            </div>
+            @if (enrolled)
+            {
+                <span class="status status-confirmed"><i class="bi bi-check2-circle me-1"></i>You are entered</span>
+            }
+        </div>
+        <hr />
+        <div class="row g-3">
+            <div class="col-md-3"><span class="section-kicker">Race date</span><div class="fw-semibold">@ImageUrlHelper.RaceDate(Model?.EventDate ?? DateTime.Today)</div></div>
+            <div class="col-md-3"><span class="section-kicker">Distance</span><div class="fw-semibold">@Model?.DistanceKm km</div></div>
+            <div class="col-md-6"><span class="section-kicker">Location</span><div class="fw-semibold"><i class="bi bi-geo-alt me-1"></i>@Model?.Location</div></div>
+        </div>
+        <p class="mt-3 mb-0">@Model?.Description</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card p-4">
+            <p class="section-kicker">Choose your category</p>
+            <h2 class="h4 section-title">Available categories</h2>
+            @if (!categories.Any())
+            {
+                <p class="text-muted mb-0">No categories have been published for this event yet.</p>
+            }
+            else
+            {
+                <div class="list-group list-group-flush mt-3">
+                    @foreach (var category in categories)
+                    {
+                        <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <div>
+                                <strong>@category.CategoryName</strong>
+                                <div class="field-hint">
+                                    @if (category.MinAge.HasValue || category.MaxAge.HasValue)
+                                    {
+                                        <text>Age @(category.MinAge?.ToString() ?? "0")–@(category.MaxAge?.ToString() ?? "open")</text>
+                                    }
+                                    else
+                                    {
+                                        <text>Open category</text>
+                                    }
+                                </div>
+                            </div>
+                            @if (isParticipant && !enrolled)
+                            {
+                                <form asp-controller="Events" asp-action="Enrol" method="post" class="d-flex gap-2 align-items-center">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="eventId" value="@Model!.EventId" />
+                                    <input type="hidden" name="categoryId" value="@category.CategoryId" />
+                                    <button type="submit" class="btn btn-accent btn-sm"><i class="bi bi-box-arrow-in-right me-1"></i>Enter Event</button>
+                                </form>
+                            }
+                        </div>
+                    }
+                </div>
+                if (!isParticipant && !enrolled)
+                {
+                    <div class="alert alert-light border mt-3 mb-0 small">
+                        <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Context.Request.Path">Log in as a Participant</a> to enter this event.
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card p-4">
+            <p class="section-kicker">Live leaderboard</p>
+            <h2 class="h4 section-title">Published results</h2>
+            @if (!results.Any())
+            {
+                <p class="text-muted mb-0">Results will appear here once the Organiser captures them.</p>
+            }
+            else
+            {
+                <div class="table-responsive mt-3">
+                    <table class="table table-sm align-middle">
+                        <thead><tr><th>Pos</th><th>Participant</th><th>Time</th></tr></thead>
+                        <tbody>
+                            @foreach (var r in results.Take(15))
+                            {
+                                <tr class="@(r.FinishingPosition <= 3 ? $"podium-{r.FinishingPosition}" : "")">
+                                    <td class="podium">@ImageUrlHelper.Position(r.FinishingPosition)</td>
+                                    <td>@r.ParticipantName</td>
+                                    <td>@r.FinishTime</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
