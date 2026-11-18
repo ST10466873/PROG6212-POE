@@ -84,3 +84,18 @@ All routes are relative to the API base URL (for example `https://localhost:5001
 | **Total** | **22** |
 
 Failure codes are included for every endpoint that can fail. This plan is the specification for Part 2; any deviation implemented later must be explained in the README.
+
+---
+
+## 7. Part 3 additive endpoints (MVC, cloud images and dashboards)
+
+These endpoints extend the original 22-endpoint Part 2 plan. They do not replace or change any
+Part 2 behaviour; the MVC application consumes these routes in addition to the originals.
+
+| HTTP Method | Route | Description | Role Required | Request Body | Expected Response |
+|---|---|---|---|---|---|
+| POST | `/api/events/{id}/banner` | Uploads an event banner through the API. The API alone writes it to Azure Blob Storage (or the local dev fallback) and stores the returned URL on the event. | Organiser (owner) | `multipart/form-data` field `file` | `200 OK` — `{ url, fileName, storage }`. `400 Bad Request` — missing/invalid image. `401/403` — session or ownership failure. `404` — event missing. |
+| POST | `/api/users/me/profile-picture` | Uploads the signed-in user's profile picture through the API into blob storage. | Any | `multipart/form-data` field `file` | `200 OK` — `{ url, fileName, storage }`. `400 Bad Request` — missing/invalid image. `401` — not logged in. |
+| GET | `/api/files/{path}` | Public read proxy for API-hosted images. Used by the MVC Media controller so browsers never access Azure or the API host directly. | None | None | `200 OK` — image bytes with content type. `404 Not Found` — file missing. |
+| GET | `/api/organisers/dashboard` | Returns event, enrolment, upcoming-event and result totals plus a per-event summary for the signed-in Organiser. | Organiser | None | `200 OK` — dashboard DTO. `401 Unauthorized` — not logged in. `403 Forbidden` — wrong role. |
+| GET | `/api/enrolments/me/results` | Returns the Participant's personal race history including event date, category, finish time, position and total finishers. | Participant | None | `200 OK` — list of results. `401 Unauthorized` — not logged in. `403 Forbidden` — wrong role. |
