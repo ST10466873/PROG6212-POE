@@ -141,6 +141,8 @@ Then open:
 | API + Swagger | http://localhost:5001/swagger |
 | SQL Server | localhost:1433 |
 
+A deployment/request-flow diagram is available in [`docs/part3-deployment.md`](docs/part3-deployment.md).
+
 `docker compose down` stops the stack; `docker compose down -v` also removes the database volume.
 
 To run just the web image (the API must already be reachable):
