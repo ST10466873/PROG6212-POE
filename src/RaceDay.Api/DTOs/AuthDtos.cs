@@ -34,7 +34,7 @@ public record AuthResponse(int UserId, string Email, string Role, string Session
 // ============================================================
 
 /// <summary>Public profile view — includes role name via join.</summary>
-public record UserProfileDto(int UserId, string FirstName, string LastName, string Email, string Role, string? PhoneNumber, DateTime DateOfBirth, bool IsActive, DateTime CreatedAt);
+public record UserProfileDto(int UserId, string FirstName, string LastName, string Email, string Role, string? PhoneNumber, DateTime DateOfBirth, bool IsActive, DateTime CreatedAt, string? ProfilePictureUrl = null);
 
 /// <summary>Update payload for own profile — email uniqueness checked in controller (409).</summary>
 public record UpdateProfileRequest(string FirstName, string LastName, string Email, string? PhoneNumber, DateTime DateOfBirth);
@@ -53,7 +53,7 @@ public record CreateEventRequest(
     [Required] string EventType // Run/Walk/Cycle — CK_Events_EventType
 );
 /// <summary>Event detail — includes optional Route and organiser display name.</summary>
-public record EventDto(int EventId, int OrganiserId, string EventName, string Description, DateTime EventDate, string Location, decimal DistanceKm, string EventType, RouteDto? Route, string OrganiserName);
+public record EventDto(int EventId, int OrganiserId, string EventName, string Description, DateTime EventDate, string Location, decimal DistanceKm, string EventType, RouteDto? Route, string OrganiserName, string? BannerImageUrl = null);
 /// <summary>1:1 route info shown on GET /api/events/{id}.</summary>
 public record RouteDto(string StartPoint, string EndPoint, int ElevationGainM, string? GpxTrackUrl);
 
@@ -83,3 +83,22 @@ public record EnrolmentDto(int EnrolmentId, int EventId, string EventName, int U
 public record CreateResultRequest([Required] string FinishTime, [Required, Range(1, int.MaxValue)] int Position);
 /// <summary>Result view — ordered by FinishingPosition on GET /api/events/{id}/results.</summary>
 public record ResultDto(int ResultId, int EnrolmentId, int EventId, string EventName, string ParticipantName, string FinishTime, int FinishingPosition, DateTime CapturedAt);
+
+// ============================================================
+// Part 3 DTOs — dashboard, personal race history and uploads
+// ============================================================
+
+/// <summary>One row of the Organiser dashboard: an event with its enrolment/result counts.</summary>
+public record OrganiserEventSummaryDto(int EventId, string EventName, DateTime EventDate, string Location, string EventType, string? BannerImageUrl, int EnrolmentCount, int ResultCount, bool IsUpcoming);
+
+/// <summary>Aggregated dashboard figures plus every event owned by the current Organiser.</summary>
+public record OrganiserDashboardDto(int TotalEvents, int TotalEnrolments, int UpcomingEvents, int ResultsCaptured, List<OrganiserEventSummaryDto> Events);
+
+/// <summary>
+/// A participant's personal result row. TotalFinishers powers the "47th out of 312 finishers"
+/// display required by the Part 3 My Results page.
+/// </summary>
+public record MyResultDto(int ResultId, int EnrolmentId, int EventId, string EventName, DateTime EventDate, string CategoryName, string FinishTime, int FinishingPosition, int TotalFinishers, DateTime CapturedAt);
+
+/// <summary>Returned by the two multipart upload endpoints after the file has been stored.</summary>
+public record ImageUploadResponse(string Url, string FileName, string Storage);

@@ -33,6 +33,12 @@ public class Event
     /// <summary>Type discriminator: Run | Walk | Cycle (CK_Events_EventType).</summary>
     public string EventType { get; set; } = null!; // Run | Walk | Cycle
 
+    /// <summary>
+    /// Part 3 — URL of the event banner stored in Azure Blob Storage (or the local
+    /// development fallback). The MVC application only receives this URL from the API.
+    /// </summary>
+    public string? BannerImageUrl { get; set; }
+
     /// <summary>1:1 route information for race-day preparation.</summary>
     public Route? Route { get; set; }
 

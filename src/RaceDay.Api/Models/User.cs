@@ -30,6 +30,12 @@ public class User
     /// <summary>Optional contact number.</summary>
     public string? PhoneNumber { get; set; }
 
+    /// <summary>
+    /// Part 3 — URL of the participant's profile picture stored through the API's
+    /// Azure Blob Storage integration. Never written by the MVC project directly.
+    /// </summary>
+    public string? ProfilePictureUrl { get; set; }
+
     /// <summary>Required for age-category validation (Under 20 / Senior).</summary>
     public DateTime DateOfBirth { get; set; }
 

@@ -94,6 +94,39 @@ public class EnrolmentsController : ControllerBase
     }
 
     /// <summary>
+    /// GET /api/enrolments/me/results — personal race history for the current Participant.
+    /// Includes the event date, chosen category, finish time, position and the number of
+    /// finishers so the MVC page can display "47th out of 312 finishers".
+    /// </summary>
+    [HttpGet("api/enrolments/me/results")]
+    public async Task<IActionResult> GetMyResults()
+    {
+        var current = await SessionHelper.GetCurrentAsync(Request, _db, _auth);
+        if (current == null) return SessionHelper.UnauthorizedResult();
+        if (current.Value.user.Role.RoleName != "Participant")
+            return SessionHelper.ForbiddenResult("Only a Participant has a personal race history.");
+
+        var totals = await _db.Results.GroupBy(r => r.EventId)
+            .Select(g => new { EventId = g.Key, Finishers = g.Count() })
+            .ToDictionaryAsync(x => x.EventId, x => x.Finishers);
+
+        var rows = await _db.Results
+            .Include(r => r.Enrolment)
+            .Include(r => r.Event)
+            .Include(r => r.Enrolment!.Category)
+            .Where(r => r.Enrolment!.UserId == current.Value.user.UserId)
+            .OrderByDescending(r => r.Event.EventDate)
+            .ToListAsync();
+
+        var dtos = rows.Select(r => new MyResultDto(
+            r.ResultId, r.EnrolmentId, r.EventId, r.Event.EventName, r.Event.EventDate,
+            r.Enrolment!.Category.CategoryName, r.FinishTime.ToString(@"hh\:mm\:ss\.fff"),
+            r.FinishingPosition, totals.TryGetValue(r.EventId, out var count) ? count : 0, r.CapturedAt));
+
+        return Ok(dtos);
+    }
+
+    /// <summary>
     /// DELETE /api/enrolments/{id} — Participant cancels their own enrolment before race day.
     /// </summary>
     /// <returns>204 No Content, 403 when cancelling another user's enrolment.</returns>

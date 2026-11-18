@@ -21,6 +21,10 @@ builder.Services.AddSwaggerGen(c =>
 // AuthService is scoped per request — holds the DbContext
 builder.Services.AddScoped<AuthService>();
 
+// Part 3: image storage is an API concern only. Configuration decides between
+// Azure Blob Storage and the local development fallback (see ImageStorageService).
+builder.Services.AddSingleton<IImageStorageService, ImageStorageService>();
+
 // --- Database: InMemory for Testing env, else SQL Server or InMemory fallback ---
 // Testing env is set by WebApplicationFactory in tests (isolated InMemory DBs)
 if (builder.Environment.EnvironmentName == "Testing")

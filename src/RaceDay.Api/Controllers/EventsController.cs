@@ -34,7 +34,7 @@ public class EventsController : ControllerBase
         if (!string.IsNullOrWhiteSpace(location)) q = q.Where(e => e.Location.Contains(location));
         var list = await q.OrderBy(e => e.EventDate).ToListAsync();
         // Project to DTO — route omitted in list view for brevity
-        var dtos = list.Select(e => new EventDto(e.EventId, e.OrganiserId, e.EventName, e.Description, e.EventDate, e.Location, e.DistanceKm, e.EventType, null, $"{e.Organiser.FirstName} {e.Organiser.LastName}")).ToList();
+        var dtos = list.Select(e => new EventDto(e.EventId, e.OrganiserId, e.EventName, e.Description, e.EventDate, e.Location, e.DistanceKm, e.EventType, null, $"{e.Organiser.FirstName} {e.Organiser.LastName}", e.BannerImageUrl)).ToList();
         return Ok(dtos);
     }
 
@@ -50,7 +50,7 @@ public class EventsController : ControllerBase
         if (e == null) return NotFound(new { message = "Event does not exist." });
         RouteDto? rd = null;
         if (e.Route != null) rd = new RouteDto(e.Route.StartPoint, e.Route.EndPoint, e.Route.ElevationGainM, e.Route.GpxTrackUrl);
-        return Ok(new EventDto(e.EventId, e.OrganiserId, e.EventName, e.Description, e.EventDate, e.Location, e.DistanceKm, e.EventType, rd, $"{e.Organiser.FirstName} {e.Organiser.LastName}"));
+        return Ok(new EventDto(e.EventId, e.OrganiserId, e.EventName, e.Description, e.EventDate, e.Location, e.DistanceKm, e.EventType, rd, $"{e.Organiser.FirstName} {e.Organiser.LastName}", e.BannerImageUrl));
     }
 
     /// <summary>
@@ -92,7 +92,7 @@ public class EventsController : ControllerBase
         _db.Routes.Add(route);
         await _db.SaveChangesAsync();
 
-        return Created($"/api/events/{ev.EventId}", new EventDto(ev.EventId, ev.OrganiserId, ev.EventName, ev.Description, ev.EventDate, ev.Location, ev.DistanceKm, ev.EventType, new RouteDto(route.StartPoint, route.EndPoint, route.ElevationGainM, route.GpxTrackUrl), $"{cur.Value.user.FirstName} {cur.Value.user.LastName}"));
+        return Created($"/api/events/{ev.EventId}", new EventDto(ev.EventId, ev.OrganiserId, ev.EventName, ev.Description, ev.EventDate, ev.Location, ev.DistanceKm, ev.EventType, new RouteDto(route.StartPoint, route.EndPoint, route.ElevationGainM, route.GpxTrackUrl), $"{cur.Value.user.FirstName} {cur.Value.user.LastName}", ev.BannerImageUrl));
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ public class EventsController : ControllerBase
         ev.DistanceKm = req.DistanceKm;
         ev.EventType = req.EventType;
         await _db.SaveChangesAsync();
-        return Ok(new EventDto(ev.EventId, ev.OrganiserId, ev.EventName, ev.Description, ev.EventDate, ev.Location, ev.DistanceKm, ev.EventType, null, ""));
+        return Ok(new EventDto(ev.EventId, ev.OrganiserId, ev.EventName, ev.Description, ev.EventDate, ev.Location, ev.DistanceKm, ev.EventType, null, "", ev.BannerImageUrl));
     }
 
     /// <summary>

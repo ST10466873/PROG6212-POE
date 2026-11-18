@@ -32,7 +32,7 @@ public class UsersController : ControllerBase
         if (cur == null) return SessionHelper.UnauthorizedResult();
         var u = cur.Value.user;
         // Map to DTO including RoleName via navigation
-        return Ok(new UserProfileDto(u.UserId, u.FirstName, u.LastName, u.Email, u.Role.RoleName, u.PhoneNumber, u.DateOfBirth, u.IsActive, u.CreatedAt));
+        return Ok(new UserProfileDto(u.UserId, u.FirstName, u.LastName, u.Email, u.Role.RoleName, u.PhoneNumber, u.DateOfBirth, u.IsActive, u.CreatedAt, u.ProfilePictureUrl));
     }
 
     /// <summary>
@@ -66,6 +66,6 @@ public class UsersController : ControllerBase
         await _db.SaveChangesAsync();
         // Resolve role name for response
         var role = await _db.Roles.FindAsync(user.RoleId);
-        return Ok(new UserProfileDto(user.UserId, user.FirstName, user.LastName, user.Email, role!.RoleName, user.PhoneNumber, user.DateOfBirth, user.IsActive, user.CreatedAt));
+        return Ok(new UserProfileDto(user.UserId, user.FirstName, user.LastName, user.Email, role!.RoleName, user.PhoneNumber, user.DateOfBirth, user.IsActive, user.CreatedAt, user.ProfilePictureUrl));
     }
 }

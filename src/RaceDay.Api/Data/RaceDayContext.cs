@@ -47,6 +47,7 @@ public class RaceDayContext : DbContext
             e.Property(u => u.LastName).HasMaxLength(50).IsRequired();
             e.Property(u => u.PasswordHash).HasMaxLength(255).IsRequired(); // BCrypt hash
             e.Property(u => u.PhoneNumber).HasMaxLength(20);
+            e.Property(u => u.ProfilePictureUrl).HasMaxLength(500); // Part 3 blob URL
             e.Property(u => u.IsActive).HasDefaultValue(true); // DF_Users_IsActive
             e.Property(u => u.CreatedAt).HasDefaultValueSql("SYSUTCDATETIME()"); // DF_Users_CreatedAt
             e.HasOne(u => u.Role).WithMany(r => r.Users).HasForeignKey(u => u.RoleId).OnDelete(DeleteBehavior.Restrict); // FK_Users_Roles
@@ -66,6 +67,7 @@ public class RaceDayContext : DbContext
             e.Property(ev => ev.Location).HasMaxLength(100).IsRequired();
             e.Property(ev => ev.DistanceKm).HasPrecision(6, 2); // DECIMAL(6,2)
             e.Property(ev => ev.EventType).HasMaxLength(10).IsRequired();
+            e.Property(ev => ev.BannerImageUrl).HasMaxLength(500); // Part 3 blob URL
             e.HasOne(ev => ev.Organiser).WithMany(u => u.OrganisedEvents).HasForeignKey(ev => ev.OrganiserId).OnDelete(DeleteBehavior.Restrict); // FK_Events_Users
             e.ToTable(t =>
             {
